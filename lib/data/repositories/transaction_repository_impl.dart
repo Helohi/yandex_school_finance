@@ -1,10 +1,12 @@
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_model.dart';
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_request_model.dart';
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/domain/repositories/transaction_repository.dart';
 
-class TransactionRepository {
+class TransactionRepositoryImpl implements TransactionRepository {
   final List<Map<String, Object?>> transactions = [];
 
+  @override
   Future<TransactionModel> createTransaction(
     TransactionRequestModel newTransaction,
   ) async {
@@ -20,6 +22,7 @@ class TransactionRepository {
     return TransactionModel.fromJson(transactions.last);
   }
 
+  @override
   Future<TransactionResponseModel> getTransactionById(int id) async {
     await Future.delayed(Duration(seconds: 1));
 
@@ -45,6 +48,7 @@ class TransactionRepository {
     });
   }
 
+  @override
   Future<TransactionResponseModel> updateTransactionById(
     int id,
     TransactionRequestModel updatedTransaction,
@@ -73,10 +77,12 @@ class TransactionRepository {
     });
   }
 
+  @override
   Future<void> removeTransactionById(int id) async {
     await Future.delayed(Duration(seconds: 1));
   }
 
+  @override
   Future<List<TransactionResponseModel>> getTransactionsInPeriod(
     int id, {
     String? startDate,

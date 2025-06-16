@@ -1,6 +1,7 @@
 import 'package:yandex_school_finance/data/models/category_model.dart';
+import 'package:yandex_school_finance/domain/repositories/category_repository.dart';
 
-class CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final List<Map<String, Object?>> categories = [
     {"id": 1, "name": "Зарплата", "emoji": "💰", "isIncome": true},
     {"id": 2, "name": "Обучение", "emoji": "📚", "isIncome": false},
@@ -8,6 +9,7 @@ class CategoryRepository {
     {"id": 4, "name": "Траты на Дом", "emoji": "🏠", "isIncome": false},
   ];
 
+  @override
   Future<List<CategoryModel>> getCategories() async {
     await Future.delayed(Duration(seconds: 1));
 
@@ -16,6 +18,7 @@ class CategoryRepository {
         .toList();
   }
 
+  @override
   Future<List<CategoryModel>> getCategoriesWithType(bool isIncome) async {
     await Future.delayed(Duration(seconds: 1));
 

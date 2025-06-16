@@ -3,8 +3,9 @@ import 'package:yandex_school_finance/data/models/account_models/account_history
 import 'package:yandex_school_finance/data/models/account_models/account_model.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_response_model.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/domain/repositories/bank_account_repository.dart';
 
-class BankAccountRepository {
+class BankAccountRepositoryImpl implements BankAccountRepository {
   final List<Map<String, Object?>> accounts = [
     {
       "id": 1,
@@ -17,11 +18,13 @@ class BankAccountRepository {
     },
   ];
 
+  @override
   Future<List<AccountModel>> getAccounts() async {
     await Future.delayed(Duration(seconds: 1));
     return accounts.map((el) => AccountModel.fromJson(el)).toList();
   }
 
+  @override
   Future<AccountModel> createAccount(
     AccountCreateRequestModel newAccount,
   ) async {
@@ -37,6 +40,7 @@ class BankAccountRepository {
     return AccountModel.fromJson(accounts.last);
   }
 
+  @override
   Future<AccountResponseModel> getAccountById(int id) async {
     await Future.delayed(Duration(seconds: 1));
 
@@ -66,6 +70,7 @@ class BankAccountRepository {
     });
   }
 
+  @override
   Future<AccountModel> updateAccountById(
     int id,
     AccountUpdateRequestModel updatedAccount,
@@ -82,6 +87,7 @@ class BankAccountRepository {
     );
   }
 
+  @override
   Future<AccountHistoryResponseModel> getAccountHistory(int id) async {
     await Future.delayed(Duration(seconds: 1));
 

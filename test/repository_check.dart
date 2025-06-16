@@ -2,16 +2,16 @@ import 'dart:developer';
 
 import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yandex_school_finance/data/repositories/bank_account_repository.dart';
-import 'package:yandex_school_finance/data/repositories/category_repository.dart';
-import 'package:yandex_school_finance/data/repositories/transaction_repository.dart';
+import 'package:yandex_school_finance/data/repositories/bank_account_repository_impl.dart';
+import 'package:yandex_school_finance/data/repositories/category_repository_impl.dart';
+import 'package:yandex_school_finance/data/repositories/transaction_repository_impl.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_create_request_model.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_request_model.dart';
 
 void main() {
   test('Category Repository Test', () async {
-    CategoryRepository categoryRepository = CategoryRepository();
+    CategoryRepositoryImpl categoryRepository = CategoryRepositoryImpl();
 
     log(categoryRepository.categories.toString());
 
@@ -23,7 +23,7 @@ void main() {
   });
 
   test("Account Repository Test", () async {
-    BankAccountRepository accountRepository = BankAccountRepository();
+    BankAccountRepositoryImpl accountRepository = BankAccountRepositoryImpl();
 
     log((await accountRepository.getAccounts()).toString());
 
@@ -54,7 +54,8 @@ void main() {
   });
 
   test("Transaction Repository Test", () async {
-    TransactionRepository transactionRepository = TransactionRepository();
+    TransactionRepositoryImpl transactionRepository =
+        TransactionRepositoryImpl();
 
     log(
       (await transactionRepository.createTransaction(
