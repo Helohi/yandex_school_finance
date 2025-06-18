@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:yandex_school_finance/core/app_themes.dart';
-import 'package:yandex_school_finance/presentation/pages/tabbar_page.dart';
+import 'package:yandex_school_finance/core/app_router.dart';
+import 'package:yandex_school_finance/core/service_locator.dart' as di;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  di.init();
+  await dotenv.load();
+
   runApp(const FinanceApp());
 }
 
@@ -11,11 +17,11 @@ class FinanceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: AppRouter.router,
       themeMode: ThemeMode.light,
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
-      home: TabbarPage(),
     );
   }
 }
