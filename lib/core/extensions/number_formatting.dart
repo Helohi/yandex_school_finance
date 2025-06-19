@@ -4,7 +4,7 @@ extension NumberFormatting on double {
     String integerPart = parts[0];
     String? fractionalPart = parts.length > 1 ? parts[1] : null;
 
-    String formattedIntegerPart = '';
+    String formattedIntegerPart = "";
     int count = 0;
     for (int i = integerPart.length - 1; i >= 0; i--) {
       formattedIntegerPart = integerPart[i] + formattedIntegerPart;
