@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:yandex_school_finance/core/extenstions/number_formatting.dart';
+import 'package:yandex_school_finance/core/utils/sum_of_transactions.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
@@ -37,7 +37,7 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
           ),
         ],
       ),
-      body: BlocBuilder<TransactionCubit, UIState>(
+      body: BlocBuilder<TransactionCubit, TransactionUIState>(
         builder: (context, state) {
           return switch (state) {
             InitialState() => SizedBox.shrink(),
@@ -48,8 +48,9 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
                   children: [
                     TopListTile(
                       title: "Всего",
-                      trailing:
-                          "${state.transactions.fold<double>(0, (value, element) => value + element.amount.toDouble()).formatWithSpaces()} ₽",
+                      trailing: Text(
+                        "${sumOfTransactions(state.transactions)} ₽",
+                      ),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -78,10 +79,16 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
 }
 
 class TopListTile extends StatelessWidget {
-  const TopListTile({super.key, required this.title, required this.trailing});
+  const TopListTile({
+    super.key,
+    required this.title,
+    required this.trailing,
+    this.onTap,
+  });
 
   final String title;
-  final String trailing;
+  final Widget trailing;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +99,7 @@ class TopListTile extends StatelessWidget {
           horizontal: BorderSide(width: 0.5, color: Colors.grey),
         ),
       ),
-      child: ListTile(title: Text(title), trailing: Text(trailing)),
+      child: ListTile(title: Text(title), trailing: trailing, onTap: onTap),
     );
   }
 }

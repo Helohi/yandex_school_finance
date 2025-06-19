@@ -8,6 +8,7 @@ import 'package:yandex_school_finance/data/repositories/swagger_repositories/swa
 import 'package:yandex_school_finance/domain/repositories/bank_account_repository.dart';
 import 'package:yandex_school_finance/domain/repositories/category_repository.dart';
 import 'package:yandex_school_finance/domain/repositories/transaction_repository.dart';
+import 'package:yandex_school_finance/domain/use_cases/get_current_account_transactions_in_period.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.dart';
 
 final sl = GetIt.instance;
@@ -32,10 +33,6 @@ void init() {
   );
 
   // Use Cases
-  sl.registerFactory(
-    () => GetTodayTransactions(
-      transactionRepository: sl(),
-      accountRepository: sl(),
-    ),
-  );
+  sl.registerFactory(() => GetCurrentAccountTransactionsInPeriod(sl(), sl()));
+  sl.registerFactory(() => GetTodayTransactions(sl()));
 }

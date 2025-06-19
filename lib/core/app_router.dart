@@ -20,10 +20,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: "/spends",
-                builder: (context, state) => BlocProvider(
-                  create: (context) => TransactionCubit(sl()),
-                  child: TodaysTransactionsPage(isIncome: false),
-                ),
+                builder: _todaysTransactionsBuilder(false),
                 routes: [
                   GoRoute(path: "/history", builder: _historyBuilder(false)),
                 ],
@@ -34,10 +31,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: "/incomes",
-                builder: (context, state) => BlocProvider(
-                  create: (context) => TransactionCubit(sl()),
-                  child: TodaysTransactionsPage(isIncome: true),
-                ),
+                builder: _todaysTransactionsBuilder(true),
                 routes: [
                   GoRoute(path: "/history", builder: _historyBuilder(true)),
                 ],
@@ -74,10 +68,23 @@ class AppRouter {
   );
 }
 
+Widget Function(BuildContext, GoRouterState) _todaysTransactionsBuilder(
+  bool isIncome,
+) {
+  Widget wrapper(BuildContext context, GoRouterState state) {
+    return BlocProvider(
+      create: (context) => TransactionCubit(sl()),
+      child: TodaysTransactionsPage(isIncome: isIncome),
+    );
+  }
+
+  return wrapper;
+}
+
 Widget Function(BuildContext, GoRouterState) _historyBuilder(bool isIncome) {
   Widget wrapper(BuildContext context, GoRouterState state) {
     return BlocProvider(
-      create: (context) => HistoryCubit(),
+      create: (context) => HistoryCubit(sl()),
       child: HistoryPage(isIncome: isIncome),
     );
   }

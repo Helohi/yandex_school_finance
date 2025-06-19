@@ -3,7 +3,7 @@ import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.dart';
 
-class TransactionCubit extends Cubit<UIState> {
+class TransactionCubit extends Cubit<TransactionUIState> {
   TransactionCubit(this.getTodaysTransactions) : super(InitialState());
 
   final GetTodayTransactions getTodaysTransactions;
@@ -11,11 +11,7 @@ class TransactionCubit extends Cubit<UIState> {
   Future<void> loadTodayTransactions(bool isIncome) async {
     emit(LoadingState());
 
-    final failOrTransactions = await getTodaysTransactions(
-      GetTodaysTransactionsParams(
-        isIncome ? OperationType.income : OperationType.spend,
-      ),
-    );
+    final failOrTransactions = await getTodaysTransactions(isIncome);
 
     failOrTransactions.fold(
       (Failure fail) {
@@ -28,19 +24,19 @@ class TransactionCubit extends Cubit<UIState> {
   }
 }
 
-sealed class UIState {}
+sealed class TransactionUIState {}
 
-class InitialState extends UIState {}
+class InitialState extends TransactionUIState {}
 
-class LoadingState extends UIState {}
+class LoadingState extends TransactionUIState {}
 
-class LoadedState extends UIState {
+class LoadedState extends TransactionUIState {
   final List<TransactionResponseModel> transactions;
 
   LoadedState({required this.transactions});
 }
 
-class ErrorState extends UIState {
+class ErrorState extends TransactionUIState {
   final String message;
 
   ErrorState({required this.message});

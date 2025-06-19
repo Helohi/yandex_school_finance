@@ -43,6 +43,22 @@ class AppThemes {
         textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       ),
     ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        selectedBackgroundColor: Color(0xff2AE881),
+      ),
+    ),
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: Color(0xffD4FAE6),
+      rangePickerBackgroundColor: Color(0xffD4FAE6),
+      rangeSelectionBackgroundColor: Color(0xff2AE881),
+      dayBackgroundColor: WidgetStateProperty.fromMap({
+        WidgetState.selected: Color(0xff2AE881),
+      }),
+      dayForegroundColor: WidgetStateProperty.fromMap({
+        WidgetState.selected: Colors.black,
+      }),
+    ),
   );
 
   static final darkTheme = ThemeData();
