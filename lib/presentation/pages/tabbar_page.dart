@@ -1,55 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
-class TabbarPage extends StatefulWidget {
-  const TabbarPage({super.key});
+class TabbarPage extends StatelessWidget {
+  const TabbarPage({super.key, required this.navShell});
 
-  @override
-  State<TabbarPage> createState() => _TabbarPageState();
-}
-
-class _TabbarPageState extends State<TabbarPage> {
-  int currentPage = 0;
+  final StatefulNavigationShell navShell;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: navShell,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPage,
-        onDestinationSelected: (value) => setState(() => currentPage = value),
+        selectedIndex: navShell.currentIndex,
+        onDestinationSelected: _goBranch,
         destinations: [
           NavigationDestination(
             icon: SvgPicture.asset(
               "assets/icons/spends.svg",
-              colorFilter: _currentColorFilter(0),
+              colorFilter: _currentColorFilter(context, 0),
             ),
             label: 'Расходы',
           ),
           NavigationDestination(
             icon: SvgPicture.asset(
               "assets/icons/incomes.svg",
-              colorFilter: _currentColorFilter(1),
+              colorFilter: _currentColorFilter(context, 1),
             ),
             label: "Доходы",
           ),
           NavigationDestination(
             icon: SvgPicture.asset(
               "assets/icons/calculator.svg",
-              colorFilter: _currentColorFilter(2),
+              colorFilter: _currentColorFilter(context, 2),
             ),
             label: "Счет",
           ),
           NavigationDestination(
             icon: SvgPicture.asset(
               "assets/icons/articles.svg",
-              colorFilter: _currentColorFilter(3),
+              colorFilter: _currentColorFilter(context, 3),
             ),
             label: "Статьи",
           ),
           NavigationDestination(
             icon: SvgPicture.asset(
               "assets/icons/settings.svg",
-              colorFilter: _currentColorFilter(4),
+              colorFilter: _currentColorFilter(context, 4),
             ),
             label: 'Настройки',
           ),
@@ -58,8 +55,8 @@ class _TabbarPageState extends State<TabbarPage> {
     );
   }
 
-  ColorFilter? _currentColorFilter(int iconIndex) {
-    if (iconIndex == currentPage) {
+  ColorFilter? _currentColorFilter(BuildContext context, int iconIndex) {
+    if (iconIndex == navShell.currentIndex) {
       return ColorFilter.mode(
         Theme.of(
           context,
@@ -68,5 +65,9 @@ class _TabbarPageState extends State<TabbarPage> {
       );
     }
     return null;
+  }
+
+  void _goBranch(int index) {
+    navShell.goBranch(index, initialLocation: index == navShell.currentIndex);
   }
 }
