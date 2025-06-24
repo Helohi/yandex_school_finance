@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/utils/sum_of_transactions.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
+import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
 class TodaysTransactionsPage extends StatefulWidget {
@@ -74,32 +75,6 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
         shape: CircleBorder(),
         child: Icon(Icons.add),
       ),
-    );
-  }
-}
-
-class TopListTile extends StatelessWidget {
-  const TopListTile({
-    super.key,
-    required this.title,
-    required this.trailing,
-    this.onTap,
-  });
-
-  final String title;
-  final Widget trailing;
-  final void Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xffD4FAE6),
-        border: Border.symmetric(
-          horizontal: BorderSide(width: 0.5, color: Colors.grey),
-        ),
-      ),
-      child: ListTile(title: Text(title), trailing: trailing, onTap: onTap),
     );
   }
 }

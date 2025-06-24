@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-class TabbarPage extends StatelessWidget {
-  const TabbarPage({super.key, required this.navShell});
+class NavigationBarPage extends StatelessWidget {
+  const NavigationBarPage({super.key, required this.navShell});
 
   final StatefulNavigationShell navShell;
 

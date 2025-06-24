@@ -6,7 +6,7 @@ import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/pages/history_page.dart';
 import 'package:yandex_school_finance/presentation/pages/todays_transaction_page.dart';
-import 'package:yandex_school_finance/presentation/pages/tabbar_page.dart';
+import 'package:yandex_school_finance/presentation/pages/navigatino_bar_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -14,7 +14,7 @@ class AppRouter {
       GoRoute(path: "/", redirect: (context, state) => "/spends"),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
-            TabbarPage(navShell: navigationShell),
+            NavigationBarPage(navShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [

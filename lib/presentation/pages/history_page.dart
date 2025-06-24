@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
 import 'package:yandex_school_finance/core/utils/sum_of_transactions.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
-import 'package:yandex_school_finance/presentation/pages/todays_transaction_page.dart';
+import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
 class HistoryPage extends StatefulWidget {
