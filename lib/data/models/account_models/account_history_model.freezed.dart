@@ -29,12 +29,12 @@ $AccountHistoryModelCopyWith<AccountHistoryModel> get copyWith => _$AccountHisto
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountHistoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.changeType, changeType) || other.changeType == changeType)&&const DeepCollectionEquality().equals(other.previousState, previousState)&&const DeepCollectionEquality().equals(other.newState, newState)&&(identical(other.changeTimestamp, changeTimestamp) || other.changeTimestamp == changeTimestamp)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountHistoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.changeType, changeType) || other.changeType == changeType)&&(identical(other.previousState, previousState) || other.previousState == previousState)&&(identical(other.newState, newState) || other.newState == newState)&&(identical(other.changeTimestamp, changeTimestamp) || other.changeTimestamp == changeTimestamp)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,accountId,changeType,const DeepCollectionEquality().hash(previousState),const DeepCollectionEquality().hash(newState),changeTimestamp,createdAt);
+int get hashCode => Object.hash(runtimeType,id,accountId,changeType,previousState,newState,changeTimestamp,createdAt);
 
 @override
 String toString() {
@@ -53,7 +53,7 @@ $Res call({
 });
 
 
-
+$AccountStateModelCopyWith<$Res>? get previousState;$AccountStateModelCopyWith<$Res> get newState;
 
 }
 /// @nodoc
@@ -66,19 +66,40 @@ class _$AccountHistoryModelCopyWithImpl<$Res>
 
 /// Create a copy of AccountHistoryModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? accountId = null,Object? changeType = null,Object? previousState = freezed,Object? newState = freezed,Object? changeTimestamp = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? accountId = null,Object? changeType = null,Object? previousState = freezed,Object? newState = null,Object? changeTimestamp = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,changeType: null == changeType ? _self.changeType : changeType // ignore: cast_nullable_to_non_nullable
 as AccountHistoryChangeType,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
-as AccountStateModel?,newState: freezed == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
+as AccountStateModel?,newState: null == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
 as AccountStateModel,changeTimestamp: null == changeTimestamp ? _self.changeTimestamp : changeTimestamp // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
+/// Create a copy of AccountHistoryModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountStateModelCopyWith<$Res>? get previousState {
+    if (_self.previousState == null) {
+    return null;
+  }
 
+  return $AccountStateModelCopyWith<$Res>(_self.previousState!, (value) {
+    return _then(_self.copyWith(previousState: value));
+  });
+}/// Create a copy of AccountHistoryModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountStateModelCopyWith<$Res> get newState {
+  
+  return $AccountStateModelCopyWith<$Res>(_self.newState, (value) {
+    return _then(_self.copyWith(newState: value));
+  });
+}
 }
 
 
@@ -110,12 +131,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AccountHistoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.changeType, changeType) || other.changeType == changeType)&&const DeepCollectionEquality().equals(other.previousState, previousState)&&const DeepCollectionEquality().equals(other.newState, newState)&&(identical(other.changeTimestamp, changeTimestamp) || other.changeTimestamp == changeTimestamp)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AccountHistoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.changeType, changeType) || other.changeType == changeType)&&(identical(other.previousState, previousState) || other.previousState == previousState)&&(identical(other.newState, newState) || other.newState == newState)&&(identical(other.changeTimestamp, changeTimestamp) || other.changeTimestamp == changeTimestamp)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,accountId,changeType,const DeepCollectionEquality().hash(previousState),const DeepCollectionEquality().hash(newState),changeTimestamp,createdAt);
+int get hashCode => Object.hash(runtimeType,id,accountId,changeType,previousState,newState,changeTimestamp,createdAt);
 
 @override
 String toString() {
@@ -134,7 +155,7 @@ $Res call({
 });
 
 
-
+@override $AccountStateModelCopyWith<$Res>? get previousState;@override $AccountStateModelCopyWith<$Res> get newState;
 
 }
 /// @nodoc
@@ -147,20 +168,41 @@ class __$AccountHistoryModelCopyWithImpl<$Res>
 
 /// Create a copy of AccountHistoryModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? accountId = null,Object? changeType = null,Object? previousState = freezed,Object? newState = freezed,Object? changeTimestamp = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? accountId = null,Object? changeType = null,Object? previousState = freezed,Object? newState = null,Object? changeTimestamp = null,Object? createdAt = null,}) {
   return _then(_AccountHistoryModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,changeType: null == changeType ? _self.changeType : changeType // ignore: cast_nullable_to_non_nullable
 as AccountHistoryChangeType,previousState: freezed == previousState ? _self.previousState : previousState // ignore: cast_nullable_to_non_nullable
-as AccountStateModel?,newState: freezed == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
+as AccountStateModel?,newState: null == newState ? _self.newState : newState // ignore: cast_nullable_to_non_nullable
 as AccountStateModel,changeTimestamp: null == changeTimestamp ? _self.changeTimestamp : changeTimestamp // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
 
+/// Create a copy of AccountHistoryModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountStateModelCopyWith<$Res>? get previousState {
+    if (_self.previousState == null) {
+    return null;
+  }
 
+  return $AccountStateModelCopyWith<$Res>(_self.previousState!, (value) {
+    return _then(_self.copyWith(previousState: value));
+  });
+}/// Create a copy of AccountHistoryModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountStateModelCopyWith<$Res> get newState {
+  
+  return $AccountStateModelCopyWith<$Res>(_self.newState, (value) {
+    return _then(_self.copyWith(newState: value));
+  });
+}
 }
 
 // dart format on

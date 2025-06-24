@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
-import 'package:yandex_school_finance/core/utils/sum_of_transactions.dart';
+import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
@@ -80,7 +80,9 @@ class _HistoryPageState extends State<HistoryPage> {
             builder: (context, state) => switch (state) {
               LoadedState() => TopListTile(
                 title: "Всего",
-                trailing: Text("${sumOfTransactions(state.transactions)} ₽"),
+                trailing: Text(
+                  "${TransactionResponseModel.sumOfTransactions(state.transactions)} ₽",
+                ),
               ),
               _ => SizedBox.shrink(),
             },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:yandex_school_finance/core/utils/sum_of_transactions.dart';
+import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
@@ -50,7 +50,7 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
                     TopListTile(
                       title: "Всего",
                       trailing: Text(
-                        "${sumOfTransactions(state.transactions)} ₽",
+                        "${TransactionResponseModel.sumOfTransactions(state.transactions)} ₽",
                       ),
                     ),
                     Expanded(
