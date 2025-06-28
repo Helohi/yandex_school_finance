@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_bank_account_datasource.dart';
@@ -44,6 +46,7 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
     } on Failure catch (e) {
       return Left(e);
     } catch (e) {
+      log("${e.runtimeType}: $e");
       return Left(UnhandledFailure());
     }
   }
@@ -52,8 +55,16 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
   Future<Either<Failure, AccountModel>> updateAccountById(
     int id,
     AccountUpdateRequestModel updatedAccount,
-  ) {
-    // TODO: implement updateAccountById
-    throw UnimplementedError();
+  ) async {
+    try {
+      return Right(
+        await _bankAccountDatasource.updateAccountById(id, updatedAccount),
+      );
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 }

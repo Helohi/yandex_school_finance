@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountCreateRequestModel {
 
- String get name;@DecimalConverter() Decimal get balance; String get currency;
+ String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency;
 /// Create a copy of AccountCreateRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountCreateRequestModelCopyWith<$Res>  {
   factory $AccountCreateRequestModelCopyWith(AccountCreateRequestModel value, $Res Function(AccountCreateRequestModel) _then) = _$AccountCreateRequestModelCopyWithImpl;
 @useResult
 $Res call({
- String name,@DecimalConverter() Decimal balance, String currency
+ String name,@DecimalConverter() Decimal balance, CurrencyEnum currency
 });
 
 
@@ -71,7 +71,7 @@ class _$AccountCreateRequestModelCopyWithImpl<$Res>
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,
+as CurrencyEnum,
   ));
 }
 
@@ -87,7 +87,7 @@ class _AccountCreateRequestModel implements AccountCreateRequestModel {
 
 @override final  String name;
 @override@DecimalConverter() final  Decimal balance;
-@override final  String currency;
+@override final  CurrencyEnum currency;
 
 /// Create a copy of AccountCreateRequestModel
 /// with the given fields replaced by the non-null parameter values.
@@ -122,7 +122,7 @@ abstract mixin class _$AccountCreateRequestModelCopyWith<$Res> implements $Accou
   factory _$AccountCreateRequestModelCopyWith(_AccountCreateRequestModel value, $Res Function(_AccountCreateRequestModel) _then) = __$AccountCreateRequestModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name,@DecimalConverter() Decimal balance, String currency
+ String name,@DecimalConverter() Decimal balance, CurrencyEnum currency
 });
 
 
@@ -144,7 +144,7 @@ class __$AccountCreateRequestModelCopyWithImpl<$Res>
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,
+as CurrencyEnum,
   ));
 }
 

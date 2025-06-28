@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountHistoryResponseModel {
 
- int get accountId; String get accountName; String get currency;@DecimalConverter() Decimal get currentBalance; List<AccountHistoryModel> get history;
+ int get accountId; String get accountName; CurrencyEnum get currency;@DecimalConverter() Decimal get currentBalance; List<AccountHistoryModel> get history;
 /// Create a copy of AccountHistoryResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountHistoryResponseModelCopyWith<$Res>  {
   factory $AccountHistoryResponseModelCopyWith(AccountHistoryResponseModel value, $Res Function(AccountHistoryResponseModel) _then) = _$AccountHistoryResponseModelCopyWithImpl;
 @useResult
 $Res call({
- int accountId, String accountName, String currency,@DecimalConverter() Decimal currentBalance, List<AccountHistoryModel> history
+ int accountId, String accountName, CurrencyEnum currency,@DecimalConverter() Decimal currentBalance, List<AccountHistoryModel> history
 });
 
 
@@ -71,7 +71,7 @@ class _$AccountHistoryResponseModelCopyWithImpl<$Res>
 accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,accountName: null == accountName ? _self.accountName : accountName // ignore: cast_nullable_to_non_nullable
 as String,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,currentBalance: null == currentBalance ? _self.currentBalance : currentBalance // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,currentBalance: null == currentBalance ? _self.currentBalance : currentBalance // ignore: cast_nullable_to_non_nullable
 as Decimal,history: null == history ? _self.history : history // ignore: cast_nullable_to_non_nullable
 as List<AccountHistoryModel>,
   ));
@@ -89,7 +89,7 @@ class _AccountHistoryResponseModel implements AccountHistoryResponseModel {
 
 @override final  int accountId;
 @override final  String accountName;
-@override final  String currency;
+@override final  CurrencyEnum currency;
 @override@DecimalConverter() final  Decimal currentBalance;
  final  List<AccountHistoryModel> _history;
 @override List<AccountHistoryModel> get history {
@@ -132,7 +132,7 @@ abstract mixin class _$AccountHistoryResponseModelCopyWith<$Res> implements $Acc
   factory _$AccountHistoryResponseModelCopyWith(_AccountHistoryResponseModel value, $Res Function(_AccountHistoryResponseModel) _then) = __$AccountHistoryResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
- int accountId, String accountName, String currency,@DecimalConverter() Decimal currentBalance, List<AccountHistoryModel> history
+ int accountId, String accountName, CurrencyEnum currency,@DecimalConverter() Decimal currentBalance, List<AccountHistoryModel> history
 });
 
 
@@ -154,7 +154,7 @@ class __$AccountHistoryResponseModelCopyWithImpl<$Res>
 accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
 as int,accountName: null == accountName ? _self.accountName : accountName // ignore: cast_nullable_to_non_nullable
 as String,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,currentBalance: null == currentBalance ? _self.currentBalance : currentBalance // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,currentBalance: null == currentBalance ? _self.currentBalance : currentBalance // ignore: cast_nullable_to_non_nullable
 as Decimal,history: null == history ? _self._history : history // ignore: cast_nullable_to_non_nullable
 as List<AccountHistoryModel>,
   ));

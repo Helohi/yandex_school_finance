@@ -6,10 +6,12 @@ class TopListTile extends StatelessWidget {
     required this.title,
     required this.trailing,
     this.onTap,
+    this.leading,
   });
 
   final String title;
   final Widget trailing;
+  final Widget? leading;
   final void Function()? onTap;
 
   @override
@@ -21,7 +23,12 @@ class TopListTile extends StatelessWidget {
           horizontal: BorderSide(width: 0.5, color: Colors.grey),
         ),
       ),
-      child: ListTile(title: Text(title), trailing: trailing, onTap: onTap),
+      child: ListTile(
+        leading: leading,
+        title: Text(title),
+        trailing: trailing,
+        onTap: onTap,
+      ),
     );
   }
 }

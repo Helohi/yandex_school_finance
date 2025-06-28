@@ -11,7 +11,7 @@ _AccountHistoryResponseModel _$AccountHistoryResponseModelFromJson(
 ) => _AccountHistoryResponseModel(
   accountId: (json['accountId'] as num).toInt(),
   accountName: json['accountName'] as String,
-  currency: json['currency'] as String,
+  currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
   currentBalance: const DecimalConverter().fromJson(
     json['currentBalance'] as String,
   ),
@@ -25,7 +25,13 @@ Map<String, dynamic> _$AccountHistoryResponseModelToJson(
 ) => <String, dynamic>{
   'accountId': instance.accountId,
   'accountName': instance.accountName,
-  'currency': instance.currency,
+  'currency': _$CurrencyEnumEnumMap[instance.currency]!,
   'currentBalance': const DecimalConverter().toJson(instance.currentBalance),
   'history': instance.history,
+};
+
+const _$CurrencyEnumEnumMap = {
+  CurrencyEnum.RUB: 'RUB',
+  CurrencyEnum.USD: 'USD',
+  CurrencyEnum.EUR: 'EUR',
 };

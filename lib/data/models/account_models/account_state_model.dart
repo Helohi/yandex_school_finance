@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yandex_school_finance/core/enums/currency_enum.dart';
 import 'package:yandex_school_finance/core/utils/decimal_converter.dart';
 
 part 'account_state_model.freezed.dart';
@@ -11,7 +12,7 @@ abstract class AccountStateModel with _$AccountStateModel {
     required int id,
     required String name,
     @DecimalConverter() required Decimal balance,
-    required String currency,
+    required CurrencyEnum currency,
   }) = _AccountStateModel;
 
   factory AccountStateModel.fromJson(Map<String, dynamic> json) =>

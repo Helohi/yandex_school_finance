@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/service_locator.dart';
+import 'package:yandex_school_finance/data/models/account_models/account_model.dart';
+import 'package:yandex_school_finance/presentation/blocs/account_cubit.dart';
+import 'package:yandex_school_finance/presentation/blocs/analisys_cubit.dart';
+import 'package:yandex_school_finance/presentation/blocs/categories_cubit.dart';
+import 'package:yandex_school_finance/presentation/blocs/edit_account_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
+import 'package:yandex_school_finance/presentation/pages/account_page.dart';
+import 'package:yandex_school_finance/presentation/pages/analisys_page.dart';
+import 'package:yandex_school_finance/presentation/pages/categories_page.dart';
+import 'package:yandex_school_finance/presentation/pages/edit_account_page.dart';
 import 'package:yandex_school_finance/presentation/pages/history_page.dart';
 import 'package:yandex_school_finance/presentation/pages/todays_transaction_page.dart';
-import 'package:yandex_school_finance/presentation/pages/navigatino_bar_page.dart';
+import 'package:yandex_school_finance/presentation/pages/navigation_bar_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -22,7 +31,11 @@ class AppRouter {
                 path: "/spends",
                 builder: _todaysTransactionsBuilder(false),
                 routes: [
-                  GoRoute(path: "/history", builder: _historyBuilder(false)),
+                  GoRoute(
+                    path: "/history",
+                    builder: _historyBuilder(false),
+                    routes: _historyRoutes(false),
+                  ),
                 ],
               ),
             ],
@@ -33,7 +46,11 @@ class AppRouter {
                 path: "/incomes",
                 builder: _todaysTransactionsBuilder(true),
                 routes: [
-                  GoRoute(path: "/history", builder: _historyBuilder(true)),
+                  GoRoute(
+                    path: "/history",
+                    builder: _historyBuilder(true),
+                    routes: _historyRoutes(true),
+                  ),
                 ],
               ),
             ],
@@ -41,16 +58,37 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: "/calculate",
-                builder: (context, state) => const Placeholder(),
+                path: "/account",
+                builder: (context, state) => BlocProvider(
+                  create: (context) => AccountCubit(sl(), sl()),
+                  child: AccountPage(),
+                ),
+                routes: [
+                  GoRoute(
+                    path: "/edit/:id",
+                    builder: (context, state) {
+                      final account = state.extra as AccountModel?;
+                      return BlocProvider(
+                        create: (context) => EditAccountCubit(sl()),
+                        child: EditAccountPage(
+                          id: state.pathParameters["id"],
+                          account: account,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: "/articles",
-                builder: (context, state) => const Placeholder(),
+                path: "/categories",
+                builder: (context, state) => BlocProvider(
+                  create: (context) => CategoriesCubit(sl()),
+                  child: CategoriesPage(),
+                ),
               ),
             ],
           ),
@@ -90,4 +128,16 @@ Widget Function(BuildContext, GoRouterState) _historyBuilder(bool isIncome) {
   }
 
   return wrapper;
+}
+
+List<GoRoute> _historyRoutes(bool isIncome) {
+  return [
+    GoRoute(
+      path: "/analysis",
+      builder: (context, state) => BlocProvider(
+        create: (context) => AnalisysCubit(sl()),
+        child: AnalisysPage(isIncome: isIncome),
+      ),
+    ),
+  ];
 }

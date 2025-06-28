@@ -33,6 +33,7 @@ class AppThemes {
       backgroundColor: Color(0xff2AE881),
       foregroundColor: Colors.white,
       elevation: 0,
+      shape: CircleBorder(),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -58,6 +59,12 @@ class AppThemes {
       dayForegroundColor: WidgetStateProperty.fromMap({
         WidgetState.selected: Colors.black,
       }),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xff2AE881),
+        foregroundColor: Colors.black,
+      ),
     ),
   );
 

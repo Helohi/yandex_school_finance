@@ -1,6 +1,5 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
 import 'package:yandex_school_finance/core/utils/decimal_converter.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_brief_model.dart';
 import 'package:yandex_school_finance/data/models/category_model.dart';
@@ -24,11 +23,11 @@ abstract class TransactionResponseModel with _$TransactionResponseModel {
   factory TransactionResponseModel.fromJson(Map<String, Object?> json) =>
       _$TransactionResponseModelFromJson(json);
 
-  static String sumOfTransactions(List<TransactionResponseModel> transactions) {
+  static double sumOfTransactions(List<TransactionResponseModel> transactions) {
     final sum = transactions.fold<double>(
       0,
       (value, element) => value + element.amount.toDouble(),
     );
-    return sum.formatWithSpaces();
+    return sum;
   }
 }

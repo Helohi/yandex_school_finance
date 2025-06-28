@@ -1,5 +1,6 @@
 import "package:decimal/decimal.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:yandex_school_finance/core/enums/currency_enum.dart";
 import "package:yandex_school_finance/core/utils/decimal_converter.dart";
 
 part 'account_model.freezed.dart';
@@ -12,7 +13,7 @@ abstract class AccountModel with _$AccountModel {
     required int userId,
     required String name,
     @DecimalConverter() required Decimal balance,
-    required String currency,
+    required CurrencyEnum currency,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _AccountModel;

@@ -11,7 +11,7 @@ _AccountCreateRequestModel _$AccountCreateRequestModelFromJson(
 ) => _AccountCreateRequestModel(
   name: json['name'] as String,
   balance: const DecimalConverter().fromJson(json['balance'] as String),
-  currency: json['currency'] as String,
+  currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
 );
 
 Map<String, dynamic> _$AccountCreateRequestModelToJson(
@@ -19,5 +19,11 @@ Map<String, dynamic> _$AccountCreateRequestModelToJson(
 ) => <String, dynamic>{
   'name': instance.name,
   'balance': const DecimalConverter().toJson(instance.balance),
-  'currency': instance.currency,
+  'currency': _$CurrencyEnumEnumMap[instance.currency]!,
+};
+
+const _$CurrencyEnumEnumMap = {
+  CurrencyEnum.RUB: 'RUB',
+  CurrencyEnum.USD: 'USD',
+  CurrencyEnum.EUR: 'EUR',
 };

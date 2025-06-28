@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:yandex_school_finance/core/enums/currency_enum.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_bank_account_repository_impl.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_category_repository_impl.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_transaction_repository_impl.dart';
@@ -34,7 +35,7 @@ void main() {
         AccountCreateRequestModel(
           name: "New Account",
           balance: Decimal.parse("10000"),
-          currency: "RUB",
+          currency: CurrencyEnum.RUB,
         ),
       )).toString(),
     );
@@ -46,7 +47,7 @@ void main() {
         1,
         AccountUpdateRequestModel(
           balance: Decimal.parse("11200"),
-          currency: "USD",
+          currency: CurrencyEnum.USD,
           name: "Updated Account",
         ),
       )).toString(),

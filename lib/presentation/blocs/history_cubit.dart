@@ -12,8 +12,8 @@ class HistoryCubit extends Cubit<HistoryUIState> {
     bool isIncome, {
     required DateTime startDate,
     required DateTime endDate,
-    required String sortBy,
-    required bool isAscending,
+    String? sortBy,
+    bool? isAscending,
   }) async {
     emit(LoadingState());
 
@@ -36,7 +36,7 @@ class HistoryCubit extends Cubit<HistoryUIState> {
           transactions.sort((a, b) => a.amount.compareTo(b.amount));
         }
 
-        if (!isAscending) {
+        if (isAscending == false) {
           transactions = transactions.reversed.toList();
         }
 

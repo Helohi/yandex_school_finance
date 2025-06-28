@@ -12,7 +12,7 @@ _AccountResponseModel _$AccountResponseModelFromJson(
   id: (json['id'] as num).toInt(),
   name: json['name'] as String,
   balance: const DecimalConverter().fromJson(json['balance'] as String),
-  currency: json['currency'] as String,
+  currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
   incomeStats: (json['incomeStats'] as List<dynamic>)
       .map((e) => StatItemModel.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -29,9 +29,15 @@ Map<String, dynamic> _$AccountResponseModelToJson(
   'id': instance.id,
   'name': instance.name,
   'balance': const DecimalConverter().toJson(instance.balance),
-  'currency': instance.currency,
+  'currency': _$CurrencyEnumEnumMap[instance.currency]!,
   'incomeStats': instance.incomeStats,
   'expenseStats': instance.expenseStats,
   'createdAt': instance.createdAt.toIso8601String(),
   'updatedAt': instance.updatedAt.toIso8601String(),
+};
+
+const _$CurrencyEnumEnumMap = {
+  CurrencyEnum.RUB: 'RUB',
+  CurrencyEnum.USD: 'USD',
+  CurrencyEnum.EUR: 'EUR',
 };

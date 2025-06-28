@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountModel {
 
- int get id; int get userId; String get name;@DecimalConverter() Decimal get balance; String get currency; DateTime get createdAt; DateTime get updatedAt;
+ int get id; int get userId; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency; DateTime get createdAt; DateTime get updatedAt;
 /// Create a copy of AccountModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountModelCopyWith<$Res>  {
   factory $AccountModelCopyWith(AccountModel value, $Res Function(AccountModel) _then) = _$AccountModelCopyWithImpl;
 @useResult
 $Res call({
- int id, int userId, String name,@DecimalConverter() Decimal balance, String currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -73,7 +73,7 @@ as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_t
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -93,7 +93,7 @@ class _AccountModel implements AccountModel {
 @override final  int userId;
 @override final  String name;
 @override@DecimalConverter() final  Decimal balance;
-@override final  String currency;
+@override final  CurrencyEnum currency;
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
 
@@ -130,7 +130,7 @@ abstract mixin class _$AccountModelCopyWith<$Res> implements $AccountModelCopyWi
   factory _$AccountModelCopyWith(_AccountModel value, $Res Function(_AccountModel) _then) = __$AccountModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int userId, String name,@DecimalConverter() Decimal balance, String currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -154,7 +154,7 @@ as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_t
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));

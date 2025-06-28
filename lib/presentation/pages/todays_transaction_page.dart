@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
 import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
+import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
+import 'package:yandex_school_finance/presentation/widgets/centered_progress_indicator.dart';
 import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
@@ -42,7 +45,8 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
         builder: (context, state) {
           return switch (state) {
             InitialState() => SizedBox.shrink(),
-            LoadingState() => Center(child: CircularProgressIndicator()),
+            LoadingState() => CenteredProgressIndicator(),
+            ErrorState() => CenteredErrorText(message: state.message),
             LoadedState() => Builder(
               builder: (context) {
                 return Column(
@@ -50,15 +54,21 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
                     TopListTile(
                       title: "Всего",
                       trailing: Text(
-                        "${TransactionResponseModel.sumOfTransactions(state.transactions)} ₽",
+                        "${TransactionResponseModel.sumOfTransactions(state.transactions).formatWithSpaces()} ₽",
                       ),
                     ),
                     Expanded(
                       child: ListView.builder(
                         itemCount: state.transactions.length,
                         itemBuilder: (context, index) => TransactionTile(
-                          state.transactions[index],
-                          showEmoji: !widget.isIncome,
+                          transactionCategoryName:
+                              state.transactions[index].category.name,
+                          transactionAmount:
+                              '${state.transactions[index].amount.toDouble().formatWithSpaces()} ₽',
+                          emoji: widget.isIncome
+                              ? null
+                              : state.transactions[index].category.emoji,
+                          transactionComment: state.transactions[index].comment,
                         ),
                       ),
                     ),
@@ -66,13 +76,11 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
                 );
               },
             ),
-            ErrorState() => Center(child: Text(state.message)),
           };
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        shape: CircleBorder(),
         child: Icon(Icons.add),
       ),
     );

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountStateModel {
 
- int get id; String get name;@DecimalConverter() Decimal get balance; String get currency;
+ int get id; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency;
 /// Create a copy of AccountStateModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountStateModelCopyWith<$Res>  {
   factory $AccountStateModelCopyWith(AccountStateModel value, $Res Function(AccountStateModel) _then) = _$AccountStateModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, String currency
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency
 });
 
 
@@ -72,7 +72,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,
+as CurrencyEnum,
   ));
 }
 
@@ -89,7 +89,7 @@ class _AccountStateModel implements AccountStateModel {
 @override final  int id;
 @override final  String name;
 @override@DecimalConverter() final  Decimal balance;
-@override final  String currency;
+@override final  CurrencyEnum currency;
 
 /// Create a copy of AccountStateModel
 /// with the given fields replaced by the non-null parameter values.
@@ -124,7 +124,7 @@ abstract mixin class _$AccountStateModelCopyWith<$Res> implements $AccountStateM
   factory _$AccountStateModelCopyWith(_AccountStateModel value, $Res Function(_AccountStateModel) _then) = __$AccountStateModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, String currency
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency
 });
 
 
@@ -147,7 +147,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,
+as CurrencyEnum,
   ));
 }
 

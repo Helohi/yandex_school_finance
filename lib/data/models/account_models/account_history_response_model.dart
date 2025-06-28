@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yandex_school_finance/core/enums/currency_enum.dart';
 import 'package:yandex_school_finance/core/utils/decimal_converter.dart';
 import 'package:yandex_school_finance/data/models/account_models/account_history_model.dart';
 
@@ -11,7 +12,7 @@ abstract class AccountHistoryResponseModel with _$AccountHistoryResponseModel {
   const factory AccountHistoryResponseModel({
     required int accountId,
     required String accountName,
-    required String currency,
+    required CurrencyEnum currency,
     @DecimalConverter() required Decimal currentBalance,
     required List<AccountHistoryModel> history,
   }) = _AccountHistoryResponseModel;

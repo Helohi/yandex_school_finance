@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountResponseModel {
 
- int get id; String get name;@DecimalConverter() Decimal get balance; String get currency; List<StatItemModel> get incomeStats; List<StatItemModel> get expenseStats; DateTime get createdAt; DateTime get updatedAt;
+ int get id; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency; List<StatItemModel> get incomeStats; List<StatItemModel> get expenseStats; DateTime get createdAt; DateTime get updatedAt;
 /// Create a copy of AccountResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountResponseModelCopyWith<$Res>  {
   factory $AccountResponseModelCopyWith(AccountResponseModel value, $Res Function(AccountResponseModel) _then) = _$AccountResponseModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, String currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -72,7 +72,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,incomeStats: null == incomeStats ? _self.incomeStats : incomeStats // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,incomeStats: null == incomeStats ? _self.incomeStats : incomeStats // ignore: cast_nullable_to_non_nullable
 as List<StatItemModel>,expenseStats: null == expenseStats ? _self.expenseStats : expenseStats // ignore: cast_nullable_to_non_nullable
 as List<StatItemModel>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -93,7 +93,7 @@ class _AccountResponseModel implements AccountResponseModel {
 @override final  int id;
 @override final  String name;
 @override@DecimalConverter() final  Decimal balance;
-@override final  String currency;
+@override final  CurrencyEnum currency;
  final  List<StatItemModel> _incomeStats;
 @override List<StatItemModel> get incomeStats {
   if (_incomeStats is EqualUnmodifiableListView) return _incomeStats;
@@ -144,7 +144,7 @@ abstract mixin class _$AccountResponseModelCopyWith<$Res> implements $AccountRes
   factory _$AccountResponseModelCopyWith(_AccountResponseModel value, $Res Function(_AccountResponseModel) _then) = __$AccountResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, String currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -167,7 +167,7 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as Decimal,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as String,incomeStats: null == incomeStats ? _self._incomeStats : incomeStats // ignore: cast_nullable_to_non_nullable
+as CurrencyEnum,incomeStats: null == incomeStats ? _self._incomeStats : incomeStats // ignore: cast_nullable_to_non_nullable
 as List<StatItemModel>,expenseStats: null == expenseStats ? _self._expenseStats : expenseStats // ignore: cast_nullable_to_non_nullable
 as List<StatItemModel>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
