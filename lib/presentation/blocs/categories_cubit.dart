@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fuzzy/fuzzy.dart';
-import 'package:yandex_school_finance/data/models/category_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/category_model.dart';
 import 'package:yandex_school_finance/domain/repositories/category_repository.dart';
 
 class CategoriesCubit extends Cubit<CategoriesStateUI> {

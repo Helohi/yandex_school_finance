@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/enums/currency_enum.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 import 'package:yandex_school_finance/domain/repositories/bank_account_repository.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_current_account.dart';
 

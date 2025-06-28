@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
 import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';

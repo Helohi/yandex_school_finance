@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_common.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 
 class SwaggerTransactionDatasource {
   Future<List<TransactionResponseModel>> getTransactionsInPeriod(

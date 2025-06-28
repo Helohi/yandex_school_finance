@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shake/shake.dart';
 import 'package:yandex_school_finance/core/enums/currency_enum.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/account_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/account_top_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';

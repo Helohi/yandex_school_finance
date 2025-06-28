@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
 import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/analisys_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
@@ -141,7 +141,7 @@ class _AnalisysPageState extends State<AnalisysPage> {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
-      scrollControlDisabledMaxHeightRatio: 0.8,
+      scrollControlDisabledMaxHeightRatio: 0.9,
       builder: (context) => DraggableScrollableSheet(
         expand: false,
         builder: (context, scrollController) => ListView.builder(

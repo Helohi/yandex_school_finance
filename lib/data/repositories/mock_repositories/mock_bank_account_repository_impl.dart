@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:yandex_school_finance/core/datasource_failures.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_create_request_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_history_response_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_response_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_create_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_history_response_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_response_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 import 'package:yandex_school_finance/domain/repositories/bank_account_repository.dart';
 
 class MockBankAccountRepositoryImpl implements BankAccountRepository {

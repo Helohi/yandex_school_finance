@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart'
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart'
     show TransactionResponseModel;
+
 import 'package:yandex_school_finance/domain/use_cases/get_current_account_transactions_in_period.dart';
 
 class HistoryCubit extends Cubit<HistoryUIState> {

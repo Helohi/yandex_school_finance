@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yandex_school_finance/core/enums/currency_enum.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_create_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_request_model.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_bank_account_repository_impl.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_category_repository_impl.dart';
 import 'package:yandex_school_finance/data/repositories/mock_repositories/mock_transaction_repository_impl.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_create_request_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_request_model.dart';
 
 void main() {
   test('Category Repository Test', () async {

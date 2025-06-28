@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_common.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_model.dart';
-import 'package:yandex_school_finance/data/models/account_models/account_update_request_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 
 class SwaggerBankAccountDatasource {
   Future<List<AccountModel>> getAccounts() async {
