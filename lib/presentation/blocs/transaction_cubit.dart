@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/datasource_failures.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.dart';
 
 class TransactionCubit extends Cubit<TransactionUIState> {

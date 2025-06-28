@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/top_list_tile.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
@@ -37,7 +39,12 @@ class _HistoryPageState extends State<HistoryPage> {
         title: Text("Moя история"),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.pending_actions)),
+          IconButton(
+            onPressed: () {
+              context.go("${GoRouterState.of(context).uri}/analysis");
+            },
+            icon: Icon(Icons.pending_actions),
+          ),
         ],
       ),
       body: Column(
@@ -81,7 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
               LoadedState() => TopListTile(
                 title: "Всего",
                 trailing: Text(
-                  "${TransactionResponseModel.sumOfTransactions(state.transactions)} ₽",
+                  "${TransactionResponseModel.sumOfTransactions(state.transactions).formatWithSpaces()} ₽",
                 ),
               ),
               _ => SizedBox.shrink(),
@@ -97,11 +104,21 @@ class _HistoryPageState extends State<HistoryPage> {
               LoadedState() => Expanded(
                 child: ListView.builder(
                   itemCount: state.transactions.length,
-                  itemBuilder: (context, index) => TransactionTile(
-                    state.transactions[index],
-                    showEmoji: !widget.isIncome,
-                    showTime: true,
-                  ),
+                  itemBuilder: (context, index) {
+                    final transactionTime =
+                        state.transactions[index].transactionDate;
+                    return TransactionTile(
+                      transactionCategoryName:
+                          state.transactions[index].category.name,
+                      transactionAmount:
+                          "${state.transactions[index].amount.toDouble().formatWithSpaces()} ₽",
+                      transactionComment: state.transactions[index].comment,
+                      emoji: widget.isIncome
+                          ? null
+                          : state.transactions[index].category.emoji,
+                      time: "${transactionTime.hour}:${transactionTime.minute}",
+                    );
+                  },
                 ),
               ),
               ErrorState() => Padding(

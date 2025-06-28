@@ -16,3 +16,8 @@ class IncorrectIdFormat extends Failure {
   @override
   String get message => "Неверный аккаунт или транзакция";
 }
+
+class IdNotFound extends Failure {
+  @override
+  String get message => "Данный ID не был найден";
+}

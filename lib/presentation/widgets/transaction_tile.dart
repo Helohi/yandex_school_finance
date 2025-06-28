@@ -1,37 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
-import 'package:yandex_school_finance/data/models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/presentation/widgets/emoji_avatar.dart';
 
 class TransactionTile extends StatelessWidget {
-  const TransactionTile(
-    this.transaction, {
+  const TransactionTile({
     super.key,
-    required this.showEmoji,
-    this.showTime = false,
+    required this.transactionCategoryName,
+    required this.transactionAmount,
+    this.transactionComment,
+    this.emoji,
+    this.time,
+    this.onTap,
   });
 
-  final bool showEmoji;
-  final bool showTime;
-  final TransactionResponseModel transaction;
+  final String transactionCategoryName;
+  final String transactionAmount;
+  final String? transactionComment;
+  final String? emoji;
+  final String? time;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final transactionDate = transaction.transactionDate;
-
     return ListTile(
-      title: Text(transaction.category.name),
-      subtitle: transaction.comment != null ? Text(transaction.comment!) : null,
-      leading: showEmoji
-          ? CircleAvatar(
-              backgroundColor: Color(0xffD4FAE6),
-              radius: 12,
-              child: Text(
-                transaction.category.emoji,
-                style: ListTileTheme.of(context).leadingAndTrailingTextStyle,
-              ),
-            )
-          : null,
+      onTap: onTap,
+      title: Text(transactionCategoryName),
+      subtitle: transactionComment != null ? Text(transactionComment!) : null,
+      leading: emoji != null ? EmojiAvatar(emoji: emoji!) : null,
       trailing: TextButton.icon(
         onPressed: null,
         iconAlignment: IconAlignment.end,
@@ -41,11 +36,7 @@ class TransactionTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text("${transaction.amount.toDouble().formatWithSpaces()} ₽"),
-              if (showTime)
-                Text("${transactionDate.hour}:${transactionDate.hour}"),
-            ],
+            children: [Text(transactionAmount), if (time != null) Text(time!)],
           ),
         ),
       ),
