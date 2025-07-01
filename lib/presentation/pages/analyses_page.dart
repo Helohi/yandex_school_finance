@@ -3,20 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
 import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
-import 'package:yandex_school_finance/presentation/blocs/analisys_cubit.dart';
+import 'package:yandex_school_finance/presentation/blocs/analyses_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
-class AnalisysPage extends StatefulWidget {
-  const AnalisysPage({super.key, required this.isIncome});
+class AnalysesPage extends StatefulWidget {
+  const AnalysesPage({super.key, required this.isIncome});
 
   final bool isIncome;
 
   @override
-  State<AnalisysPage> createState() => _AnalisysPageState();
+  State<AnalysesPage> createState() => _AnalysesPageState();
 }
 
-class _AnalisysPageState extends State<AnalisysPage> {
+class _AnalysesPageState extends State<AnalysesPage> {
   DateTimeRange _selectedRange = DateTimeRange(
     start: DateTime.now().copyWith(month: DateTime.now().month - 1),
     end: DateTime.now(),
@@ -38,17 +38,17 @@ class _AnalisysPageState extends State<AnalisysPage> {
       ),
       body: Column(
         children: [
-          AnalisysRangeTile(
+          AnalysesRangeTile(
             title: "Период:начало",
             onPressed: _showDateRangePicker,
             dateToShow: _selectedRange.start,
           ),
-          AnalisysRangeTile(
+          AnalysesRangeTile(
             title: "Период:конец",
             onPressed: _showDateRangePicker,
             dateToShow: _selectedRange.end,
           ),
-          BlocBuilder<AnalisysCubit, AnalisysUIState>(
+          BlocBuilder<AnalysesCubit, AnalysesUIState>(
             builder: (context, state) {
               switch (state) {
                 case InitialState() || LoadingState():
@@ -74,25 +74,25 @@ class _AnalisysPageState extends State<AnalisysPage> {
                           child: Material(
                             color: Colors.transparent,
                             child: ListView.builder(
-                              itemCount: state.categorysed.length,
+                              itemCount: state.categorized.length,
                               itemBuilder: (context, index) {
                                 final localSumOfTransactions =
                                     TransactionResponseModel.sumOfTransactions(
-                                      state.categorysed[index].transactions,
+                                      state.categorized[index].transactions,
                                     );
                                 return TransactionTile(
                                   onTap: () => showTransactionsFromCategory(
-                                    state.categorysed[index].transactions,
+                                    state.categorized[index].transactions,
                                   ),
                                   transactionCategoryName:
-                                      state.categorysed[index].category.name,
+                                      state.categorized[index].category.name,
                                   transactionComment: state
-                                      .categorysed[index]
+                                      .categorized[index]
                                       .transactions
                                       .first
                                       .comment,
                                   emoji:
-                                      state.categorysed[index].category.emoji,
+                                      state.categorized[index].category.emoji,
                                   transactionAmount:
                                       "${(localSumOfTransactions / sumOfTransactions * 100).roundToDouble().formatWithSpaces()}%",
                                   time:
@@ -128,7 +128,7 @@ class _AnalisysPageState extends State<AnalisysPage> {
   }
 
   void _updateTransactions() {
-    context.read<AnalisysCubit>().getTransactionsInPeriod(
+    context.read<AnalysesCubit>().getTransactionsInPeriod(
       widget.isIncome,
       startDate: _selectedRange.start,
       endDate: _selectedRange.end,
@@ -160,8 +160,8 @@ class _AnalisysPageState extends State<AnalisysPage> {
   }
 }
 
-class AnalisysRangeTile extends StatelessWidget {
-  const AnalisysRangeTile({
+class AnalysesRangeTile extends StatelessWidget {
+  const AnalysesRangeTile({
     super.key,
     required this.title,
     required this.dateToShow,

@@ -3,8 +3,8 @@ import 'package:yandex_school_finance/data/models/freezed_models/category_model.
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_current_account_transactions_in_period.dart';
 
-class AnalisysCubit extends Cubit<AnalisysUIState> {
-  AnalisysCubit(this._getTransactionsInPeriodUseCase) : super(InitialState());
+class AnalysesCubit extends Cubit<AnalysesUIState> {
+  AnalysesCubit(this._getTransactionsInPeriodUseCase) : super(InitialState());
 
   final GetCurrentAccountTransactionsInPeriod _getTransactionsInPeriodUseCase;
 
@@ -26,20 +26,20 @@ class AnalisysCubit extends Cubit<AnalisysUIState> {
         emit(ErrorState(message: fail.message));
       },
       (transactions) {
-        final categorysed = <CategoryModel, CategorizedTransactions>{};
+        final categorized = <CategoryModel, CategorizedTransactions>{};
 
         for (final transaction in transactions) {
-          categorysed[transaction.category] ??= CategorizedTransactions(
+          categorized[transaction.category] ??= CategorizedTransactions(
             category: transaction.category,
             transactions: [],
           );
 
-          categorysed[transaction.category]!.transactions.add(transaction);
+          categorized[transaction.category]!.transactions.add(transaction);
         }
 
         emit(
           LoadedState(
-            categorysed: categorysed.values.toList(),
+            categorized: categorized.values.toList(),
             transactions: transactions,
           ),
         );
@@ -48,20 +48,20 @@ class AnalisysCubit extends Cubit<AnalisysUIState> {
   }
 }
 
-sealed class AnalisysUIState {}
+sealed class AnalysesUIState {}
 
-class InitialState extends AnalisysUIState {}
+class InitialState extends AnalysesUIState {}
 
-class LoadingState extends AnalisysUIState {}
+class LoadingState extends AnalysesUIState {}
 
-class LoadedState extends AnalisysUIState {
-  final List<CategorizedTransactions> categorysed;
+class LoadedState extends AnalysesUIState {
+  final List<CategorizedTransactions> categorized;
   final List<TransactionResponseModel> transactions;
 
-  LoadedState({required this.categorysed, required this.transactions});
+  LoadedState({required this.categorized, required this.transactions});
 }
 
-class ErrorState extends AnalisysUIState {
+class ErrorState extends AnalysesUIState {
   final String message;
   ErrorState({required this.message});
 }

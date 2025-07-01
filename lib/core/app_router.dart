@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/service_locator.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/account_cubit.dart';
-import 'package:yandex_school_finance/presentation/blocs/analisys_cubit.dart';
+import 'package:yandex_school_finance/presentation/blocs/analyses_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/categories_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/edit_account_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/history_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/pages/account_page.dart';
-import 'package:yandex_school_finance/presentation/pages/analisys_page.dart';
+import 'package:yandex_school_finance/presentation/pages/analyses_page.dart';
 import 'package:yandex_school_finance/presentation/pages/categories_page.dart';
 import 'package:yandex_school_finance/presentation/pages/edit_account_page.dart';
 import 'package:yandex_school_finance/presentation/pages/history_page.dart';
@@ -133,10 +133,10 @@ Widget Function(BuildContext, GoRouterState) _historyBuilder(bool isIncome) {
 List<GoRoute> _historyRoutes(bool isIncome) {
   return [
     GoRoute(
-      path: "/analysis",
+      path: "/analyses",
       builder: (context, state) => BlocProvider(
-        create: (context) => AnalisysCubit(sl()),
-        child: AnalisysPage(isIncome: isIncome),
+        create: (context) => AnalysesCubit(sl()),
+        child: AnalysesPage(isIncome: isIncome),
       ),
     ),
   ];
