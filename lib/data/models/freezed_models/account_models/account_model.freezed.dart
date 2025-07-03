@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountModel {
 
- int get id; int get userId; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency; DateTime get createdAt; DateTime get updatedAt;
+ int get id; int get userId; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency;@DateTimeConverter() DateTime get createdAt;@DateTimeConverter() DateTime get updatedAt;
 /// Create a copy of AccountModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountModelCopyWith<$Res>  {
   factory $AccountModelCopyWith(AccountModel value, $Res Function(AccountModel) _then) = _$AccountModelCopyWithImpl;
 @useResult
 $Res call({
- int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 
@@ -86,7 +86,7 @@ as DateTime,
 @JsonSerializable()
 
 class _AccountModel implements AccountModel {
-  const _AccountModel({required this.id, required this.userId, required this.name, @DecimalConverter() required this.balance, required this.currency, required this.createdAt, required this.updatedAt});
+  const _AccountModel({required this.id, required this.userId, required this.name, @DecimalConverter() required this.balance, required this.currency, @DateTimeConverter() required this.createdAt, @DateTimeConverter() required this.updatedAt});
   factory _AccountModel.fromJson(Map<String, dynamic> json) => _$AccountModelFromJson(json);
 
 @override final  int id;
@@ -94,8 +94,8 @@ class _AccountModel implements AccountModel {
 @override final  String name;
 @override@DecimalConverter() final  Decimal balance;
 @override final  CurrencyEnum currency;
-@override final  DateTime createdAt;
-@override final  DateTime updatedAt;
+@override@DateTimeConverter() final  DateTime createdAt;
+@override@DateTimeConverter() final  DateTime updatedAt;
 
 /// Create a copy of AccountModel
 /// with the given fields replaced by the non-null parameter values.
@@ -130,7 +130,7 @@ abstract mixin class _$AccountModelCopyWith<$Res> implements $AccountModelCopyWi
   factory _$AccountModelCopyWith(_AccountModel value, $Res Function(_AccountModel) _then) = __$AccountModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 

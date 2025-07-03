@@ -26,25 +26,37 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
   }
 
   @override
-  Future<Either<Failure, AccountResponseModel>> getAccountById(int id) {
-    // TODO: implement getAccountById
-    throw UnimplementedError();
+  Future<Either<Failure, AccountResponseModel>> getAccountById(int id) async {
+    try {
+      return Right(await _bankAccountDatasource.getAccountById(id));
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 
   @override
   Future<Either<Failure, AccountHistoryResponseModel>> getAccountHistory(
     int id,
-  ) {
-    // TODO: implement getAccountHistory
-    throw UnimplementedError();
+  ) async {
+    try {
+      return Right(await _bankAccountDatasource.getAccountHistory(id));
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 
   @override
   Future<Either<Failure, List<AccountModel>>> getAccounts() async {
     try {
       return Right(await _bankAccountDatasource.getAccounts());
-    } on Failure catch (e) {
-      return Left(e);
+    } on Failure catch (f) {
+      return Left(f);
     } catch (e) {
       log("${e.runtimeType}: $e");
       return Left(UnhandledFailure());
@@ -60,8 +72,8 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
       return Right(
         await _bankAccountDatasource.updateAccountById(id, updatedAccount),
       );
-    } on Failure catch (e) {
-      return Left(e);
+    } on Failure catch (f) {
+      return Left(f);
     } catch (e) {
       log("${e.runtimeType}: $e");
       return Left(UnhandledFailure());

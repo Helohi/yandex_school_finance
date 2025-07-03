@@ -16,8 +16,8 @@ class SwaggerCategoryRepository implements CategoryRepository {
   Future<Either<Failure, List<CategoryModel>>> getCategories() async {
     try {
       return Right(await _categoryDatasource.getCategories());
-    } on Failure catch (e) {
-      return Left(e);
+    } on Failure catch (f) {
+      return Left(f);
     } catch (e) {
       log("${e.runtimeType}: $e");
       return Left(UnhandledFailure());

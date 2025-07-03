@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
 class AccountTopTile extends StatelessWidget {
-  const AccountTopTile({
+  AccountTopTile({
     super.key,
     required this.leadingLabel,
     required this.trailingLabel,
     this.onTap,
     this.emoji,
-  });
+    Color? tileColor,
+  }) : tileColor = tileColor ?? Color(0xffD4FAE6);
 
   final String leadingLabel;
   final Widget trailingLabel;
   final Function()? onTap;
   final String? emoji;
+  final Color tileColor;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      tileColor: Color(0xffD4FAE6),
+      tileColor: tileColor,
       title: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

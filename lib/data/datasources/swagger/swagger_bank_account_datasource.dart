@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_common.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_history_response_model.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
+import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_response_model.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 
 class SwaggerBankAccountDatasource {
@@ -42,5 +44,39 @@ class SwaggerBankAccountDatasource {
     }
 
     return AccountModel.fromJson(jsonDecode(response.body));
+  }
+
+  Future<AccountResponseModel> getAccountById(int id) async {
+    final response = await http.get(
+      Uri.parse("${SwaggerCommon.baseUrl}/accounts/$id"),
+      headers: SwaggerCommon.authHeader,
+    );
+
+    if (response.statusCode == 400) {
+      throw IncorrectIdFormat();
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedRequest();
+    } else if (response.statusCode == 404) {
+      throw IdNotFound();
+    }
+
+    return AccountResponseModel.fromJson(jsonDecode(response.body));
+  }
+
+  Future<AccountHistoryResponseModel> getAccountHistory(int id) async {
+    final response = await http.get(
+      Uri.parse("${SwaggerCommon.baseUrl}/accounts/$id/history"),
+      headers: SwaggerCommon.authHeader,
+    );
+
+    if (response.statusCode == 400) {
+      throw IncorrectIdFormat();
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedRequest();
+    } else if (response.statusCode == 404) {
+      throw IdNotFound();
+    }
+
+    return AccountHistoryResponseModel.fromJson(jsonDecode(response.body));
   }
 }

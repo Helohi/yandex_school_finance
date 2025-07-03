@@ -41,7 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.go("${GoRouterState.of(context).uri}/analysis");
+              context.go("${GoRouterState.of(context).uri}/analyses");
             },
             icon: Icon(Icons.pending_actions),
           ),

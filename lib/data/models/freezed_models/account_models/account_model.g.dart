@@ -6,16 +6,17 @@ part of 'account_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_AccountModel _$AccountModelFromJson(Map<String, dynamic> json) =>
-    _AccountModel(
-      id: (json['id'] as num).toInt(),
-      userId: (json['userId'] as num).toInt(),
-      name: json['name'] as String,
-      balance: const DecimalConverter().fromJson(json['balance'] as String),
-      currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+_AccountModel _$AccountModelFromJson(
+  Map<String, dynamic> json,
+) => _AccountModel(
+  id: (json['id'] as num).toInt(),
+  userId: (json['userId'] as num).toInt(),
+  name: json['name'] as String,
+  balance: const DecimalConverter().fromJson(json['balance'] as String),
+  currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
+  createdAt: const DateTimeConverter().fromJson(json['createdAt'] as String),
+  updatedAt: const DateTimeConverter().fromJson(json['updatedAt'] as String),
+);
 
 Map<String, dynamic> _$AccountModelToJson(_AccountModel instance) =>
     <String, dynamic>{
@@ -24,8 +25,8 @@ Map<String, dynamic> _$AccountModelToJson(_AccountModel instance) =>
       'name': instance.name,
       'balance': const DecimalConverter().toJson(instance.balance),
       'currency': _$CurrencyEnumEnumMap[instance.currency]!,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'createdAt': const DateTimeConverter().toJson(instance.createdAt),
+      'updatedAt': const DateTimeConverter().toJson(instance.updatedAt),
     };
 
 const _$CurrencyEnumEnumMap = {
