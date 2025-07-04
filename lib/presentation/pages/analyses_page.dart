@@ -1,10 +1,15 @@
+import 'dart:math';
+
+import 'package:animated_finance_pie_chart/animated_finance_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yandex_school_finance/core/extensions/date_to_string.dart';
 import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/analyses_cubit.dart';
+import 'package:yandex_school_finance/presentation/widgets/analyses_range_tile.dart';
+import 'package:yandex_school_finance/presentation/widgets/background_barrier.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
+import 'package:yandex_school_finance/presentation/widgets/centered_progress_indicator.dart';
 import 'package:yandex_school_finance/presentation/widgets/transaction_tile.dart';
 
 class AnalysesPage extends StatefulWidget {
@@ -22,6 +27,9 @@ class _AnalysesPageState extends State<AnalysesPage> {
     end: DateTime.now(),
   );
 
+  double? _sumOfCurrentTransactions;
+  List<CategorizedTransactions>? _currentCategorized;
+
   @override
   void initState() {
     super.initState();
@@ -36,75 +44,116 @@ class _AnalysesPageState extends State<AnalysesPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          AnalysesRangeTile(
-            title: "Период:начало",
-            onPressed: _showDateRangePicker,
-            dateToShow: _selectedRange.start,
+          Column(
+            children: [
+              AnalysesRangeTile(
+                title: "Период:начало",
+                onPressed: _showDateRangePicker,
+                dateToShow: _selectedRange.start,
+              ),
+              AnalysesRangeTile(
+                title: "Период:конец",
+                onPressed: _showDateRangePicker,
+                dateToShow: _selectedRange.end,
+              ),
+
+              /// sum
+              if (_sumOfCurrentTransactions != null)
+                ListTile(
+                  title: Text("Сумма"),
+                  trailing: Text(
+                    "${_sumOfCurrentTransactions!.formatWithSpaces()} ₽",
+                  ),
+                ),
+
+              /// pie chart
+              if (_currentCategorized != null &&
+                  _sumOfCurrentTransactions != null)
+                AnimatedFinanceAnalysisPieChart(
+                  animationDuration: const Duration(seconds: 5),
+                  totalVal: _sumOfCurrentTransactions!,
+                  sectors: _currentCategorized!
+                      .map(
+                        (el) => FinanceSector(
+                          value: TransactionResponseModel.sumOfTransactions(
+                            el.transactions,
+                          ),
+                          color: Color((Random().nextInt(0xFFFFFFFF))),
+                          label: el.category.name,
+                        ),
+                      )
+                      .toList(),
+                ),
+
+              if (_currentCategorized != null &&
+                  _sumOfCurrentTransactions != null)
+                Expanded(
+                  child: Column(
+                    children: [
+                      /// categories
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: ListView.builder(
+                            itemCount: _currentCategorized!.length,
+                            itemBuilder: (context, index) {
+                              final localSumOfTransactions =
+                                  TransactionResponseModel.sumOfTransactions(
+                                    _currentCategorized![index].transactions,
+                                  );
+                              return TransactionTile(
+                                onTap: () => showTransactionsFromCategory(
+                                  _currentCategorized![index].transactions,
+                                ),
+                                transactionCategoryName:
+                                    _currentCategorized![index].category.name,
+                                transactionComment: _currentCategorized![index]
+                                    .transactions
+                                    .first
+                                    .comment,
+                                emoji:
+                                    _currentCategorized![index].category.emoji,
+                                transactionAmount:
+                                    "${((localSumOfTransactions / _sumOfCurrentTransactions! * 10000).roundToDouble() / 100).formatWithSpaces()}%",
+                                time:
+                                    "${localSumOfTransactions.formatWithSpaces()} ₽",
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
-          AnalysesRangeTile(
-            title: "Период:конец",
-            onPressed: _showDateRangePicker,
-            dateToShow: _selectedRange.end,
-          ),
-          BlocBuilder<AnalysesCubit, AnalysesUIState>(
-            builder: (context, state) {
-              switch (state) {
-                case InitialState() || LoadingState():
-                  return CircularProgressIndicator();
-                case ErrorState():
-                  return CenteredErrorText(message: state.message);
-                case LoadedState():
-                  final sumOfTransactions =
+
+          /// loaders and errors
+          BlocConsumer<AnalysesCubit, AnalysesUIState>(
+            listenWhen: (previous, current) => current is LoadedState,
+            listener: (context, state) {
+              if (state is LoadedState) {
+                setState(() {
+                  _sumOfCurrentTransactions =
                       TransactionResponseModel.sumOfTransactions(
                         state.transactions,
                       );
-                  return Expanded(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text("Сумма"),
-                          trailing: Text(
-                            "${sumOfTransactions.formatWithSpaces()} ₽",
-                          ),
-                        ),
-                        SizedBox(height: 185),
-                        Expanded(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: ListView.builder(
-                              itemCount: state.categorized.length,
-                              itemBuilder: (context, index) {
-                                final localSumOfTransactions =
-                                    TransactionResponseModel.sumOfTransactions(
-                                      state.categorized[index].transactions,
-                                    );
-                                return TransactionTile(
-                                  onTap: () => showTransactionsFromCategory(
-                                    state.categorized[index].transactions,
-                                  ),
-                                  transactionCategoryName:
-                                      state.categorized[index].category.name,
-                                  transactionComment: state
-                                      .categorized[index]
-                                      .transactions
-                                      .first
-                                      .comment,
-                                  emoji:
-                                      state.categorized[index].category.emoji,
-                                  transactionAmount:
-                                      "${(localSumOfTransactions / sumOfTransactions * 100).roundToDouble().formatWithSpaces()}%",
-                                  time:
-                                      "${localSumOfTransactions.formatWithSpaces()} ₽",
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  _currentCategorized = state.categorized;
+                });
+              }
+            },
+            builder: (context, state) {
+              switch (state) {
+                case InitialState() || LoadingState():
+                  return BackgroundBarrier(child: CenteredProgressIndicator());
+                case ErrorState():
+                  return BackgroundBarrier(
+                    child: CenteredErrorText(message: state.message),
                   );
+                case LoadedState():
+                  return SizedBox.shrink();
               }
             },
           ),
@@ -114,17 +163,18 @@ class _AnalysesPageState extends State<AnalysesPage> {
   }
 
   void _showDateRangePicker() async {
-    _selectedRange =
-        await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
-          currentDate: DateTime.now(),
-          initialDateRange: _selectedRange,
-        ) ??
-        _selectedRange;
+    final newDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      currentDate: DateTime.now(),
+      initialDateRange: _selectedRange,
+    );
 
-    _updateTransactions();
+    if (newDateRange != null) {
+      setState(() => _selectedRange = newDateRange);
+      _updateTransactions();
+    }
   }
 
   void _updateTransactions() {
@@ -155,30 +205,6 @@ class _AnalysesPageState extends State<AnalysesPage> {
             emoji: transactions[index].category.emoji,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AnalysesRangeTile extends StatelessWidget {
-  const AnalysesRangeTile({
-    super.key,
-    required this.title,
-    required this.dateToShow,
-    this.onPressed,
-  });
-
-  final String title;
-  final DateTime dateToShow;
-  final Function()? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      trailing: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(dateToShow.toHumanString()),
       ),
     );
   }
