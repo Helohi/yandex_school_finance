@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountResponseModel {
 
- int get id; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency; List<StatItemModel> get incomeStats; List<StatItemModel> get expenseStats; DateTime get createdAt; DateTime get updatedAt;
+ int get id; String get name;@DecimalConverter() Decimal get balance; CurrencyEnum get currency; List<StatItemModel> get incomeStats; List<StatItemModel> get expenseStats;@DateTimeConverter() DateTime get createdAt;@DateTimeConverter() DateTime get updatedAt;
 /// Create a copy of AccountResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountResponseModelCopyWith<$Res>  {
   factory $AccountResponseModelCopyWith(AccountResponseModel value, $Res Function(AccountResponseModel) _then) = _$AccountResponseModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 
@@ -87,7 +87,7 @@ as DateTime,
 @JsonSerializable()
 
 class _AccountResponseModel implements AccountResponseModel {
-  const _AccountResponseModel({required this.id, required this.name, @DecimalConverter() required this.balance, required this.currency, required final  List<StatItemModel> incomeStats, required final  List<StatItemModel> expenseStats, required this.createdAt, required this.updatedAt}): _incomeStats = incomeStats,_expenseStats = expenseStats;
+  const _AccountResponseModel({required this.id, required this.name, @DecimalConverter() required this.balance, required this.currency, required final  List<StatItemModel> incomeStats, required final  List<StatItemModel> expenseStats, @DateTimeConverter() required this.createdAt, @DateTimeConverter() required this.updatedAt}): _incomeStats = incomeStats,_expenseStats = expenseStats;
   factory _AccountResponseModel.fromJson(Map<String, dynamic> json) => _$AccountResponseModelFromJson(json);
 
 @override final  int id;
@@ -108,8 +108,8 @@ class _AccountResponseModel implements AccountResponseModel {
   return EqualUnmodifiableListView(_expenseStats);
 }
 
-@override final  DateTime createdAt;
-@override final  DateTime updatedAt;
+@override@DateTimeConverter() final  DateTime createdAt;
+@override@DateTimeConverter() final  DateTime updatedAt;
 
 /// Create a copy of AccountResponseModel
 /// with the given fields replaced by the non-null parameter values.
@@ -144,7 +144,7 @@ abstract mixin class _$AccountResponseModelCopyWith<$Res> implements $AccountRes
   factory _$AccountResponseModelCopyWith(_AccountResponseModel value, $Res Function(_AccountResponseModel) _then) = __$AccountResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats, DateTime createdAt, DateTime updatedAt
+ int id, String name,@DecimalConverter() Decimal balance, CurrencyEnum currency, List<StatItemModel> incomeStats, List<StatItemModel> expenseStats,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 

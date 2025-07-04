@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionRequestModel {
 
- int get accountId; int get categoryId;@DecimalConverter() Decimal get amount; DateTime get transactionDate; String? get comment;
+ int get accountId; int get categoryId;@DecimalConverter() Decimal get amount;@DateTimeConverter() DateTime get transactionDate; String? get comment;
 /// Create a copy of TransactionRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $TransactionRequestModelCopyWith<$Res>  {
   factory $TransactionRequestModelCopyWith(TransactionRequestModel value, $Res Function(TransactionRequestModel) _then) = _$TransactionRequestModelCopyWithImpl;
 @useResult
 $Res call({
- int accountId, int categoryId,@DecimalConverter() Decimal amount, DateTime transactionDate, String? comment
+ int accountId, int categoryId,@DecimalConverter() Decimal amount,@DateTimeConverter() DateTime transactionDate, String? comment
 });
 
 
@@ -84,13 +84,13 @@ as String?,
 @JsonSerializable()
 
 class _TransactionRequestModel implements TransactionRequestModel {
-  const _TransactionRequestModel({required this.accountId, required this.categoryId, @DecimalConverter() required this.amount, required this.transactionDate, this.comment});
+  const _TransactionRequestModel({required this.accountId, required this.categoryId, @DecimalConverter() required this.amount, @DateTimeConverter() required this.transactionDate, this.comment});
   factory _TransactionRequestModel.fromJson(Map<String, dynamic> json) => _$TransactionRequestModelFromJson(json);
 
 @override final  int accountId;
 @override final  int categoryId;
 @override@DecimalConverter() final  Decimal amount;
-@override final  DateTime transactionDate;
+@override@DateTimeConverter() final  DateTime transactionDate;
 @override final  String? comment;
 
 /// Create a copy of TransactionRequestModel
@@ -126,7 +126,7 @@ abstract mixin class _$TransactionRequestModelCopyWith<$Res> implements $Transac
   factory _$TransactionRequestModelCopyWith(_TransactionRequestModel value, $Res Function(_TransactionRequestModel) _then) = __$TransactionRequestModelCopyWithImpl;
 @override @useResult
 $Res call({
- int accountId, int categoryId,@DecimalConverter() Decimal amount, DateTime transactionDate, String? comment
+ int accountId, int categoryId,@DecimalConverter() Decimal amount,@DateTimeConverter() DateTime transactionDate, String? comment
 });
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:yandex_school_finance/core/app_themes.dart';
 import 'package:yandex_school_finance/core/app_router.dart';
@@ -8,6 +9,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
   await dotenv.load();
+
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+  );
 
   runApp(const FinanceApp());
 }

@@ -60,7 +60,7 @@ class AppRouter {
               GoRoute(
                 path: "/account",
                 builder: (context, state) => BlocProvider(
-                  create: (context) => AccountCubit(sl(), sl()),
+                  create: (context) => AccountCubit(sl(), sl(), sl()),
                   child: AccountPage(),
                 ),
                 routes: [

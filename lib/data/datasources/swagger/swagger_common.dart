@@ -5,4 +5,7 @@ class SwaggerCommon {
   static final authHeader = <String, String>{
     "Authorization": "Bearer ${dotenv.env["TOKEN"]}",
   };
+  static final contentTypeHeader = <String, String>{
+    "Content-Type": "application/json",
+  };
 }

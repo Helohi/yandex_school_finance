@@ -12,7 +12,9 @@ _TransactionRequestModel _$TransactionRequestModelFromJson(
   accountId: (json['accountId'] as num).toInt(),
   categoryId: (json['categoryId'] as num).toInt(),
   amount: const DecimalConverter().fromJson(json['amount'] as String),
-  transactionDate: DateTime.parse(json['transactionDate'] as String),
+  transactionDate: const DateTimeConverter().fromJson(
+    json['transactionDate'] as String,
+  ),
   comment: json['comment'] as String?,
 );
 
@@ -22,6 +24,6 @@ Map<String, dynamic> _$TransactionRequestModelToJson(
   'accountId': instance.accountId,
   'categoryId': instance.categoryId,
   'amount': const DecimalConverter().toJson(instance.amount),
-  'transactionDate': instance.transactionDate.toIso8601String(),
+  'transactionDate': const DateTimeConverter().toJson(instance.transactionDate),
   'comment': instance.comment,
 };

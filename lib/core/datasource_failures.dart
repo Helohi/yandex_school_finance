@@ -21,3 +21,8 @@ class IdNotFound extends Failure {
   @override
   String get message => "Данный ID не был найден";
 }
+
+class AccountOrCategoryNotFound extends Failure {
+  @override
+  String get message => "Аккаунт или категория не найдены";
+}

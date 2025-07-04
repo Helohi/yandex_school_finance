@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yandex_school_finance/core/utils/date_time_converter.dart';
 import 'package:yandex_school_finance/core/utils/decimal_converter.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_brief_model.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/category_model.dart';
@@ -14,10 +15,10 @@ abstract class TransactionResponseModel with _$TransactionResponseModel {
     required AccountBriefModel account,
     required CategoryModel category,
     @DecimalConverter() required Decimal amount,
-    required DateTime transactionDate,
+    @DateTimeConverter() required DateTime transactionDate,
     String? comment,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @DateTimeConverter() required DateTime createdAt,
+    @DateTimeConverter() required DateTime updatedAt,
   }) = _TransactionResponseModel;
 
   factory TransactionResponseModel.fromJson(Map<String, Object?> json) =>

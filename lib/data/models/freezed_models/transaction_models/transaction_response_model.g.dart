@@ -13,10 +13,12 @@ _TransactionResponseModel _$TransactionResponseModelFromJson(
   account: AccountBriefModel.fromJson(json['account'] as Map<String, dynamic>),
   category: CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
   amount: const DecimalConverter().fromJson(json['amount'] as String),
-  transactionDate: DateTime.parse(json['transactionDate'] as String),
+  transactionDate: const DateTimeConverter().fromJson(
+    json['transactionDate'] as String,
+  ),
   comment: json['comment'] as String?,
-  createdAt: DateTime.parse(json['createdAt'] as String),
-  updatedAt: DateTime.parse(json['updatedAt'] as String),
+  createdAt: const DateTimeConverter().fromJson(json['createdAt'] as String),
+  updatedAt: const DateTimeConverter().fromJson(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$TransactionResponseModelToJson(
@@ -26,8 +28,8 @@ Map<String, dynamic> _$TransactionResponseModelToJson(
   'account': instance.account,
   'category': instance.category,
   'amount': const DecimalConverter().toJson(instance.amount),
-  'transactionDate': instance.transactionDate.toIso8601String(),
+  'transactionDate': const DateTimeConverter().toJson(instance.transactionDate),
   'comment': instance.comment,
-  'createdAt': instance.createdAt.toIso8601String(),
-  'updatedAt': instance.updatedAt.toIso8601String(),
+  'createdAt': const DateTimeConverter().toJson(instance.createdAt),
+  'updatedAt': const DateTimeConverter().toJson(instance.updatedAt),
 };

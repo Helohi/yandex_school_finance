@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountHistoryModel {
 
- int get id; int get accountId; AccountHistoryChangeType get changeType; AccountStateModel? get previousState; AccountStateModel get newState; String get changeTimestamp; DateTime get createdAt;
+ int get id; int get accountId; AccountHistoryChangeType get changeType; AccountStateModel? get previousState; AccountStateModel get newState; String get changeTimestamp;@DateTimeConverter() DateTime get createdAt;
 /// Create a copy of AccountHistoryModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountHistoryModelCopyWith<$Res>  {
   factory $AccountHistoryModelCopyWith(AccountHistoryModel value, $Res Function(AccountHistoryModel) _then) = _$AccountHistoryModelCopyWithImpl;
 @useResult
 $Res call({
- int id, int accountId, AccountHistoryChangeType changeType, AccountStateModel? previousState, AccountStateModel newState, String changeTimestamp, DateTime createdAt
+ int id, int accountId, AccountHistoryChangeType changeType, AccountStateModel? previousState, AccountStateModel newState, String changeTimestamp,@DateTimeConverter() DateTime createdAt
 });
 
 
@@ -107,7 +107,7 @@ $AccountStateModelCopyWith<$Res> get newState {
 @JsonSerializable()
 
 class _AccountHistoryModel implements AccountHistoryModel {
-  const _AccountHistoryModel({required this.id, required this.accountId, required this.changeType, this.previousState, required this.newState, required this.changeTimestamp, required this.createdAt});
+  const _AccountHistoryModel({required this.id, required this.accountId, required this.changeType, this.previousState, required this.newState, required this.changeTimestamp, @DateTimeConverter() required this.createdAt});
   factory _AccountHistoryModel.fromJson(Map<String, dynamic> json) => _$AccountHistoryModelFromJson(json);
 
 @override final  int id;
@@ -116,7 +116,7 @@ class _AccountHistoryModel implements AccountHistoryModel {
 @override final  AccountStateModel? previousState;
 @override final  AccountStateModel newState;
 @override final  String changeTimestamp;
-@override final  DateTime createdAt;
+@override@DateTimeConverter() final  DateTime createdAt;
 
 /// Create a copy of AccountHistoryModel
 /// with the given fields replaced by the non-null parameter values.
@@ -151,7 +151,7 @@ abstract mixin class _$AccountHistoryModelCopyWith<$Res> implements $AccountHist
   factory _$AccountHistoryModelCopyWith(_AccountHistoryModel value, $Res Function(_AccountHistoryModel) _then) = __$AccountHistoryModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int accountId, AccountHistoryChangeType changeType, AccountStateModel? previousState, AccountStateModel newState, String changeTimestamp, DateTime createdAt
+ int id, int accountId, AccountHistoryChangeType changeType, AccountStateModel? previousState, AccountStateModel newState, String changeTimestamp,@DateTimeConverter() DateTime createdAt
 });
 
 

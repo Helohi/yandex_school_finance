@@ -66,6 +66,8 @@ class AppThemes {
         foregroundColor: Colors.black,
       ),
     ),
+    snackBarTheme: SnackBarThemeData(behavior: SnackBarBehavior.floating),
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.green),
   );
 
   static final darkTheme = ThemeData();

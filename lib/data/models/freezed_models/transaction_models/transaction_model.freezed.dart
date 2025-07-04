@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionModel {
 
- int get id; int get accountId; int get categoryId;@DecimalConverter() Decimal get amount; DateTime get transactionDate; String? get comment; DateTime get createdAt; DateTime get updatedAt;
+ int get id; int get accountId; int get categoryId;@DecimalConverter() Decimal get amount;@DateTimeConverter() DateTime get transactionDate; String? get comment;@DateTimeConverter() DateTime get createdAt;@DateTimeConverter() DateTime get updatedAt;
 /// Create a copy of TransactionModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $TransactionModelCopyWith<$Res>  {
   factory $TransactionModelCopyWith(TransactionModel value, $Res Function(TransactionModel) _then) = _$TransactionModelCopyWithImpl;
 @useResult
 $Res call({
- int id, int accountId, int categoryId,@DecimalConverter() Decimal amount, DateTime transactionDate, String? comment, DateTime createdAt, DateTime updatedAt
+ int id, int accountId, int categoryId,@DecimalConverter() Decimal amount,@DateTimeConverter() DateTime transactionDate, String? comment,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 
@@ -87,17 +87,17 @@ as DateTime,
 @JsonSerializable()
 
 class _TransactionModel implements TransactionModel {
-  const _TransactionModel({required this.id, required this.accountId, required this.categoryId, @DecimalConverter() required this.amount, required this.transactionDate, this.comment, required this.createdAt, required this.updatedAt});
+  const _TransactionModel({required this.id, required this.accountId, required this.categoryId, @DecimalConverter() required this.amount, @DateTimeConverter() required this.transactionDate, this.comment, @DateTimeConverter() required this.createdAt, @DateTimeConverter() required this.updatedAt});
   factory _TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
 
 @override final  int id;
 @override final  int accountId;
 @override final  int categoryId;
 @override@DecimalConverter() final  Decimal amount;
-@override final  DateTime transactionDate;
+@override@DateTimeConverter() final  DateTime transactionDate;
 @override final  String? comment;
-@override final  DateTime createdAt;
-@override final  DateTime updatedAt;
+@override@DateTimeConverter() final  DateTime createdAt;
+@override@DateTimeConverter() final  DateTime updatedAt;
 
 /// Create a copy of TransactionModel
 /// with the given fields replaced by the non-null parameter values.
@@ -132,7 +132,7 @@ abstract mixin class _$TransactionModelCopyWith<$Res> implements $TransactionMod
   factory _$TransactionModelCopyWith(_TransactionModel value, $Res Function(_TransactionModel) _then) = __$TransactionModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int accountId, int categoryId,@DecimalConverter() Decimal amount, DateTime transactionDate, String? comment, DateTime createdAt, DateTime updatedAt
+ int id, int accountId, int categoryId,@DecimalConverter() Decimal amount,@DateTimeConverter() DateTime transactionDate, String? comment,@DateTimeConverter() DateTime createdAt,@DateTimeConverter() DateTime updatedAt
 });
 
 

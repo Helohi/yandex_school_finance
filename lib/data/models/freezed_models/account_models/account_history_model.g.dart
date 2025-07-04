@@ -23,7 +23,9 @@ _AccountHistoryModel _$AccountHistoryModelFromJson(Map<String, dynamic> json) =>
         json['newState'] as Map<String, dynamic>,
       ),
       changeTimestamp: json['changeTimestamp'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const DateTimeConverter().fromJson(
+        json['createdAt'] as String,
+      ),
     );
 
 Map<String, dynamic> _$AccountHistoryModelToJson(
@@ -35,7 +37,7 @@ Map<String, dynamic> _$AccountHistoryModelToJson(
   'previousState': instance.previousState,
   'newState': instance.newState,
   'changeTimestamp': instance.changeTimestamp,
-  'createdAt': instance.createdAt.toIso8601String(),
+  'createdAt': const DateTimeConverter().toJson(instance.createdAt),
 };
 
 const _$AccountHistoryChangeTypeEnumMap = {

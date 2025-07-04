@@ -19,8 +19,8 @@ _AccountResponseModel _$AccountResponseModelFromJson(
   expenseStats: (json['expenseStats'] as List<dynamic>)
       .map((e) => StatItemModel.fromJson(e as Map<String, dynamic>))
       .toList(),
-  createdAt: DateTime.parse(json['createdAt'] as String),
-  updatedAt: DateTime.parse(json['updatedAt'] as String),
+  createdAt: const DateTimeConverter().fromJson(json['createdAt'] as String),
+  updatedAt: const DateTimeConverter().fromJson(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$AccountResponseModelToJson(
@@ -32,8 +32,8 @@ Map<String, dynamic> _$AccountResponseModelToJson(
   'currency': _$CurrencyEnumEnumMap[instance.currency]!,
   'incomeStats': instance.incomeStats,
   'expenseStats': instance.expenseStats,
-  'createdAt': instance.createdAt.toIso8601String(),
-  'updatedAt': instance.updatedAt.toIso8601String(),
+  'createdAt': const DateTimeConverter().toJson(instance.createdAt),
+  'updatedAt': const DateTimeConverter().toJson(instance.updatedAt),
 };
 
 const _$CurrencyEnumEnumMap = {

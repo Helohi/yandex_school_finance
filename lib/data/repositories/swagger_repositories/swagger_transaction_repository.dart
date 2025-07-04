@@ -17,9 +17,15 @@ class SwaggerTransactionRepository implements TransactionRepository {
   @override
   Future<Either<Failure, TransactionModel>> createTransaction(
     TransactionRequestModel newTransaction,
-  ) {
-    // TODO: implement createTransaction
-    throw UnimplementedError();
+  ) async {
+    try {
+      return Right(await _datasource.createTransaction(newTransaction));
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 
   @override
@@ -39,8 +45,8 @@ class SwaggerTransactionRepository implements TransactionRepository {
       return Right(
         await _datasource.getTransactionsInPeriod(id, startDate, endDate),
       );
-    } on Failure catch (e) {
-      return Left(e);
+    } on Failure catch (f) {
+      return Left(f);
     } catch (e) {
       log("${e.runtimeType}: $e");
       return Left(UnhandledFailure());
@@ -48,17 +54,31 @@ class SwaggerTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<Either<Failure, void>> removeTransactionById(int id) {
-    // TODO: implement removeTransactionById
-    throw UnimplementedError();
+  Future<Either<Failure, void>> removeTransactionById(int id) async {
+    try {
+      return Right(await _datasource.removeTransactionById(id));
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 
   @override
   Future<Either<Failure, TransactionResponseModel>> updateTransactionById(
     int id,
     TransactionRequestModel updatedTransaction,
-  ) {
-    // TODO: implement updateTransactionById
-    throw UnimplementedError();
+  ) async {
+    try {
+      return Right(
+        await _datasource.updateTransactionById(id, updatedTransaction),
+      );
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 }
