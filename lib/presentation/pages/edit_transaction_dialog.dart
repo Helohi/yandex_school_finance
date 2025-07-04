@@ -10,6 +10,7 @@ import 'package:yandex_school_finance/data/models/freezed_models/transaction_mod
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/edit_transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/account_top_tile.dart';
+import 'package:yandex_school_finance/presentation/widgets/background_barrier.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_progress_indicator.dart';
 
 class EditTransactionDialog extends StatelessWidget {
@@ -288,7 +289,13 @@ class _BlocedEditTransactionDialogState
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (widget.transaction != null) {
+                          context
+                              .read<EditTransactionCubit>()
+                              .deleteTransaction(widget.transaction!.id);
+                        }
+                      },
                       child: Text("Удалить расход"),
                     ),
                   ),
@@ -297,11 +304,7 @@ class _BlocedEditTransactionDialogState
           ),
 
           if (_showOverflowLoading)
-            Opacity(
-              opacity: 0.5,
-              child: ModalBarrier(dismissible: false, color: Colors.black),
-            ),
-          if (_showOverflowLoading) const CenteredProgressIndicator(),
+            BackgroundBarrier(child: const CenteredProgressIndicator()),
         ],
       ),
     );
@@ -357,15 +360,28 @@ class _BlocedEditTransactionDialogState
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          surfaceTintColor: Colors.white,
           backgroundColor: Colors.red,
           title: const Text("Заполните все поля!"),
-          titleTextStyle: TextStyle(color: Colors.white),
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
           actions: [
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(10),
+                ),
+              ),
               onPressed: () => Navigator.pop(context),
               child: const Text("OK"),
             ),
           ],
+          actionsAlignment: MainAxisAlignment.center,
         ),
       );
       return;

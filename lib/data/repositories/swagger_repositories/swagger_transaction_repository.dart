@@ -54,9 +54,15 @@ class SwaggerTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<Either<Failure, void>> removeTransactionById(int id) {
-    // TODO: implement removeTransactionById
-    throw UnimplementedError();
+  Future<Either<Failure, void>> removeTransactionById(int id) async {
+    try {
+      return Right(await _datasource.removeTransactionById(id));
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (e) {
+      log("${e.runtimeType}: $e");
+      return Left(UnhandledFailure());
+    }
   }
 
   @override

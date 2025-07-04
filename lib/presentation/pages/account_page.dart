@@ -1,11 +1,15 @@
+import 'package:decimal/decimal.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shake/shake.dart';
 import 'package:yandex_school_finance/core/enums/currency_enum.dart';
+import 'package:yandex_school_finance/core/enums/period_enum.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
 import 'package:yandex_school_finance/presentation/blocs/account_cubit.dart';
 import 'package:yandex_school_finance/presentation/widgets/account_top_tile.dart';
+import 'package:yandex_school_finance/presentation/widgets/background_barrier.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_progress_indicator.dart';
 
@@ -19,12 +23,23 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   bool _isBalanceVisible = true;
   late final ShakeDetector _shakeDetector;
+  late final DateTime statisticEndDate;
+  late final DateTime statisticStartDate;
+
+  Set<PeriodEnum> _selectedPeriod = {PeriodEnum.month};
+  Map<DateTime, Decimal>? _statisticsData;
 
   @override
   void initState() {
     super.initState();
-    context.read<AccountCubit>().loadAccount();
+    statisticEndDate = DateTime.now();
+    statisticStartDate = statisticEndDate.copyWith(
+      month: statisticEndDate.month - 1,
+    );
+
     _startShakeDetector();
+
+    context.read<AccountCubit>().loadAccount();
   }
 
   @override
@@ -40,9 +55,11 @@ class _AccountPageState extends State<AccountPage> {
         title: const Text("Мой счет"),
         centerTitle: true,
         actions: [
-          BlocBuilder<AccountCubit, AccountStateUI>(
-            builder: (context, state) => switch (state) {
-              LoadedState() => IconButton(
+          BlocBuilder<AccountCubit, MainAccountStateUI>(
+            buildWhen: (previous, current) => current is AccountStateUI,
+            builder: (context, state) {
+              if (state is! AccountLoadedState) return SizedBox.shrink();
+              return IconButton(
                 onPressed: () async {
                   final newAccount = await context.push<AccountUpdateRequestModel>(
                     "${GoRouterState.of(context).uri}/edit/${state.account.id}",
@@ -56,52 +73,187 @@ class _AccountPageState extends State<AccountPage> {
                   }
                 },
                 icon: Icon(Icons.edit_outlined),
-              ),
-              _ => SizedBox.shrink(),
+              );
             },
           ),
         ],
       ),
-      body: BlocConsumer<AccountCubit, AccountStateUI>(
+      body: BlocConsumer<AccountCubit, MainAccountStateUI>(
+        listenWhen: (previous, current) =>
+            current is AccountLoadedState ||
+            current is AccountStatisticsLoadedState,
         listener: (context, state) {
-          if (state is SnackBarState) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+          if (state is AccountLoadedState) {
+            context.read<AccountCubit>().loadStatistics(_selectedPeriod.first);
+          } else if (state is AccountStatisticsLoadedState) {
+            setState(() => _statisticsData = state.statistics);
           }
         },
-        buildWhen: (previous, current) => current is! SnackBarState,
-        builder: (context, state) => switch (state) {
-          InitialState() || LoadingState() => CenteredProgressIndicator(),
-          LoadedState() => Column(
-            children: [
-              AccountTopTile(
-                leadingLabel: state.account.name,
-                trailingLabel: Container(
-                  color: _isBalanceVisible ? Colors.transparent : Colors.black,
-                  child: Text(
-                    "${state.account.balance} ${state.account.currency.symbol}",
+        buildWhen: (previous, current) => current is AccountStateUI,
+        builder: (context, state) {
+          if (state is! AccountStateUI) {
+            // InitialState
+            return SizedBox.shrink();
+          }
+          return switch (state) {
+            AccountLoadingState() => CenteredProgressIndicator(),
+            AccountLoadedState() => Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                /// account name and balance
+                AccountTopTile(
+                  leadingLabel: state.account.name,
+                  trailingLabel: Container(
+                    color: _isBalanceVisible
+                        ? Colors.transparent
+                        : Colors.black,
+                    child: Text(
+                      "${state.account.balance} ${state.account.currency.symbol}",
+                      style: Theme.of(
+                        context,
+                      ).listTileTheme.leadingAndTrailingTextStyle,
+                    ),
+                  ),
+                  emoji: "💰",
+                ),
+
+                /// currency
+                AccountTopTile(
+                  leadingLabel: "Валюта",
+                  trailingLabel: Text(
+                    state.account.currency.symbol,
                     style: Theme.of(
                       context,
                     ).listTileTheme.leadingAndTrailingTextStyle,
                   ),
+                  onTap: () => _showCurrencyPicker(context),
                 ),
-                emoji: "💰",
-              ),
-              AccountTopTile(
-                leadingLabel: "Валюта",
-                trailingLabel: Text(
-                  state.account.currency.symbol,
-                  style: Theme.of(
-                    context,
-                  ).listTileTheme.leadingAndTrailingTextStyle,
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SegmentedButton<PeriodEnum>(
+                    showSelectedIcon: false,
+                    style: SegmentedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    segments: [
+                      ButtonSegment(
+                        value: PeriodEnum.month,
+                        label: Text("Месяц"),
+                      ),
+                      ButtonSegment(value: PeriodEnum.year, label: Text("Год")),
+                    ],
+                    selected: _selectedPeriod,
+                    onSelectionChanged: (value) {
+                      setState(() => _selectedPeriod = value);
+                      context.read<AccountCubit>().loadStatistics(
+                        _selectedPeriod.first,
+                      );
+                    },
+                  ),
                 ),
-                onTap: () => _showModalBottomSheet(context),
-              ),
-            ],
-          ),
-          ErrorState() => CenteredErrorText(message: state.message),
-          _ => throw UnimplementedError(state.runtimeType.toString()),
+
+                /// graphic
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: AspectRatio(
+                    aspectRatio: 412 / 220,
+                    child: Stack(
+                      children: [
+                        if (_statisticsData != null)
+                          BarChart(
+                            BarChartData(
+                              barGroups: List.generate(
+                                _statisticsData!.length,
+                                (index) => BarChartGroupData(
+                                  x: index,
+                                  barRods: [
+                                    BarChartRodData(
+                                      toY: _statisticsData!.values
+                                          .elementAt(index)
+                                          .toDouble()
+                                          .abs(),
+                                      color:
+                                          _statisticsData!.values.elementAt(
+                                                index,
+                                              ) >
+                                              Decimal.zero
+                                          ? Colors.green
+                                          : Colors.red,
+                                      width: 6,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              borderData: FlBorderData(show: false),
+                              gridData: FlGridData(show: false),
+                              titlesData: FlTitlesData(
+                                show: true,
+                                rightTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                leftTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                topTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 32,
+                                    interval: 6,
+                                    getTitlesWidget: (value, meta) {
+                                      if (value % meta.appliedInterval != 0.0) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      final date = _statisticsData!.keys
+                                          .elementAt(value.toInt());
+                                      return switch (_selectedPeriod.first) {
+                                        PeriodEnum.month => Text(
+                                          "${date.day.toString().padLeft(2, '0')}"
+                                          ".${date.month.toString().padLeft(2, '0')}",
+                                        ),
+                                        PeriodEnum.year => Text(
+                                          "${date.month.toString().padLeft(2, '0')}"
+                                          ".${date.year}",
+                                        ),
+                                      };
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            duration: Duration(seconds: 2),
+                          ),
+                        BlocBuilder<AccountCubit, MainAccountStateUI>(
+                          buildWhen: (previous, current) =>
+                              current is AccountStatisticsStateUI,
+                          builder: (context, state) {
+                            if (state is AccountStatisticsLoadingState) {
+                              return BackgroundBarrier(
+                                child: CenteredProgressIndicator(),
+                              );
+                            } else if (state is AccountStatisticsErrorState) {
+                              return BackgroundBarrier(
+                                child: CenteredErrorText(
+                                  message: state.message,
+                                ),
+                              );
+                            }
+                            return SizedBox.shrink();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            AccountErrorState() => CenteredErrorText(message: state.message),
+          };
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -119,7 +271,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  void _showModalBottomSheet(BuildContext contextWithBloc) {
+  void _showCurrencyPicker(BuildContext contextWithBloc) {
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,

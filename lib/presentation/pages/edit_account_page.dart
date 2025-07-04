@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,112 +72,98 @@ class _EditAccountPageState extends State<EditAccountPage> {
         ],
       ),
 
-      body: BlocListener<EditAccountCubit, EditAccountUIState>(
-        listenWhen: (previous, current) {
-          log(previous.toString());
-          log(current.toString());
-          return true;
-        },
-        listener: (context, state) => log(state.toString()),
-        child: BlocBuilder<EditAccountCubit, EditAccountUIState>(
-          buildWhen: (previous, current) {
-            log(previous.toString());
-            log(current.toString());
-            return false;
-          },
-          builder: (context, state) {
-            switch (state) {
-              case InitialState() || LoadingState():
-                return CenteredProgressIndicator();
-              case ErrorState():
-                return CenteredErrorText(message: state.message);
-              case LoadedState():
-                _currency = state.accountResponseModel.currency;
-                if (_nameController.text.isEmpty) {
-                  _nameController.text = state.accountResponseModel.name;
-                }
-                if (_balanceController.text.isEmpty) {
-                  _balanceController.text = state.accountResponseModel.balance
-                      .toString();
-                }
-                return Column(
-                  spacing: 33,
-                  children: [
-                    IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              leading: Icon(Icons.person_outline),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: TextField(
-                                      controller: _nameController,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Название",
-                                      ),
-                                      style: TextStyle(color: Colors.black),
+      body: BlocBuilder<EditAccountCubit, EditAccountUIState>(
+        builder: (context, state) {
+          switch (state) {
+            case InitialState() || LoadingState():
+              return CenteredProgressIndicator();
+            case ErrorState():
+              return CenteredErrorText(message: state.message);
+            case LoadedState():
+              _currency = state.accountResponseModel.currency;
+              if (_nameController.text.isEmpty) {
+                _nameController.text = state.accountResponseModel.name;
+              }
+              if (_balanceController.text.isEmpty) {
+                _balanceController.text = state.accountResponseModel.balance
+                    .toString();
+              }
+              return Column(
+                spacing: 33,
+                children: [
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            leading: Icon(Icons.person_outline),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: TextField(
+                                    controller: _nameController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Название",
                                     ),
+                                    style: TextStyle(color: Colors.black),
                                   ),
-                                  Flexible(
-                                    child: TextField(
-                                      autofocus: true,
-                                      keyboardType: TextInputType.number,
-                                      controller: _balanceController,
-                                      textAlign: TextAlign.right,
-                                      decoration: InputDecoration(
-                                        hintText: "Баланс",
-                                        border: InputBorder.none,
-                                        suffix: Text(
-                                          state
-                                              .accountResponseModel
-                                              .currency
-                                              .symbol,
-                                        ),
+                                ),
+                                Flexible(
+                                  child: TextField(
+                                    autofocus: true,
+                                    keyboardType: TextInputType.number,
+                                    controller: _balanceController,
+                                    textAlign: TextAlign.right,
+                                    decoration: InputDecoration(
+                                      hintText: "Баланс",
+                                      border: InputBorder.none,
+                                      suffix: Text(
+                                        state
+                                            .accountResponseModel
+                                            .currency
+                                            .symbol,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                          Container(
-                            color: Color(0xffE46962),
-                            child: IconButton(
-                              onPressed: () {
-                                // Delete account, but we have only one
-                              },
-                              icon: Icon(Icons.delete_outlined),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffE46962),
-                          foregroundColor: Colors.white,
-                          textStyle: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        onPressed: () {
-                          // We have only one account, kakoy udalit
-                        },
-                        child: Text("Удалить счет"),
-                      ),
+                        Container(
+                          color: Color(0xffE46962),
+                          child: IconButton(
+                            onPressed: () {
+                              // Delete account, but we have only one
+                            },
+                            icon: Icon(Icons.delete_outlined),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                );
-            }
-          },
-        ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffE46962),
+                        foregroundColor: Colors.white,
+                        textStyle: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        // We have only one account, kakoy udalit
+                      },
+                      child: Text("Удалить счет"),
+                    ),
+                  ),
+                ],
+              );
+          }
+        },
       ),
     );
   }

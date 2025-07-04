@@ -82,6 +82,17 @@ class EditTransactionCubit extends Cubit<EditTransactionUIState> {
       (transaction) => emit(TransactionEditSuccessfully()),
     );
   }
+
+  Future<void> deleteTransaction(int id) async {
+    emit(TransactionEditLoadingState());
+
+    final failOrVoid = await _transactionRepository.removeTransactionById(id);
+
+    failOrVoid.fold(
+      (fail) => emit(TransactionEditError(message: fail.message)),
+      (_) => emit(TransactionEditSuccessfully()),
+    );
+  }
 }
 
 sealed class EditTransactionUIState {}

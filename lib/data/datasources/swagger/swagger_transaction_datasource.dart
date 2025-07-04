@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:yandex_school_finance/core/datasource_failures.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_common.dart';
@@ -42,8 +41,6 @@ class SwaggerTransactionDatasource {
   Future<TransactionModel> createTransaction(
     TransactionRequestModel transaction,
   ) async {
-    log(jsonEncode(transaction.toJson()));
-
     final response = await http.post(
       Uri.parse("${SwaggerCommon.baseUrl}/transactions"),
       headers: SwaggerCommon.authHeader
@@ -58,8 +55,6 @@ class SwaggerTransactionDatasource {
     } else if (response.statusCode == 404) {
       throw AccountOrCategoryNotFound();
     }
-
-    log(response.body);
 
     return TransactionModel.fromJson(jsonDecode(response.body));
   }
@@ -84,5 +79,22 @@ class SwaggerTransactionDatasource {
     }
 
     return TransactionResponseModel.fromJson(jsonDecode(response.body));
+  }
+
+  Future<void> removeTransactionById(int id) async {
+    final response = await http.delete(
+      Uri.parse("${SwaggerCommon.baseUrl}/transactions/$id"),
+      headers: SwaggerCommon.authHeader,
+    );
+
+    if (response.statusCode == 400) {
+      throw IncorrectIdFormat();
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedRequest();
+    } else if (response.statusCode == 404) {
+      throw AccountOrCategoryNotFound();
+    }
+
+    return;
   }
 }
