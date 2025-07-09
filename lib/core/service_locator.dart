@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:yandex_school_finance/core/interceptors/dio_retry_interceptor.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_bank_account_datasource.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_category_datasource.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_transaction_datasource.dart';
@@ -16,12 +19,27 @@ import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.da
 final sl = GetIt.instance;
 
 void init() {
+  sl.registerLazySingleton(
+    () =>
+        Dio(
+            BaseOptions(
+              baseUrl: "https://shmr-finance.ru/api/v1",
+              headers: {"Authorization": "Bearer ${dotenv.env["TOKEN"]}"},
+              contentType: "application/json",
+            ),
+          )
+          ..interceptors.addAll([
+            // DioDeserializerInterceptor(),
+            DioRetryInterceptor(),
+          ]),
+  );
+
   // DataSources
-  sl.registerFactory(() => SwaggerBankAccountDatasource());
+  sl.registerFactory(() => SwaggerBankAccountDatasource(sl()));
 
-  sl.registerFactory(() => SwaggerCategoryDatasource());
+  sl.registerFactory(() => SwaggerCategoryDatasource(sl()));
 
-  sl.registerFactory(() => SwaggerTransactionDatasource());
+  sl.registerFactory(() => SwaggerTransactionDatasource(sl()));
 
   // Repositories
   sl.registerFactory<BankAccountRepository>(

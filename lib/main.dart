@@ -7,8 +7,8 @@ import 'package:yandex_school_finance/core/service_locator.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  di.init();
   await dotenv.load();
+  di.init();
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
