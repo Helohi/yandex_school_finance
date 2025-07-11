@@ -10,7 +10,7 @@ _AccountStateModel _$AccountStateModelFromJson(Map<String, dynamic> json) =>
     _AccountStateModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      balance: const DecimalConverter().fromJson(json['balance'] as String),
+      balance: const DecimalConverter().fromJson(json['balance']),
       currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
     );
 

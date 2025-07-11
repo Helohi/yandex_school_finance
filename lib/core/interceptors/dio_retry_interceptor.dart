@@ -5,7 +5,7 @@ import 'package:yandex_school_finance/core/service_locator.dart';
 
 const kMaxRetryCount = 5;
 const kBaseRetryDelayInMilliseconds = 500;
-const kStatusCodesToRetry = {500, 502, 503, 408, 429, 403};
+const kStatusCodesToRetry = {500, 502, 503, 504, 408, 429};
 
 class DioRetryInterceptor extends Interceptor {
   @override
@@ -26,10 +26,8 @@ class DioRetryInterceptor extends Interceptor {
     try {
       final response = await sl.get<Dio>().fetch(err.requestOptions);
       handler.resolve(response);
-    } on DioException catch (e) {
-      return super.onError(e, handler);
     } catch (_) {
-      return handler.reject(err);
+      return handler.next(err);
     }
   }
 

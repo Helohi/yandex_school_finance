@@ -1,11 +1,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class DecimalConverter implements JsonConverter<Decimal, String> {
+class DecimalConverter implements JsonConverter<Decimal, dynamic> {
   const DecimalConverter();
 
   @override
-  Decimal fromJson(String json) => Decimal.parse(json);
+  Decimal fromJson(dynamic json) => Decimal.parse(json.toString());
 
   @override
   String toJson(Decimal object) => object.toString();

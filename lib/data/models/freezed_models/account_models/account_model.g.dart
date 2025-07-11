@@ -12,7 +12,7 @@ _AccountModel _$AccountModelFromJson(
   id: (json['id'] as num).toInt(),
   userId: (json['userId'] as num).toInt(),
   name: json['name'] as String,
-  balance: const DecimalConverter().fromJson(json['balance'] as String),
+  balance: const DecimalConverter().fromJson(json['balance']),
   currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
   createdAt: const DateTimeConverter().fromJson(json['createdAt'] as String),
   updatedAt: const DateTimeConverter().fromJson(json['updatedAt'] as String),

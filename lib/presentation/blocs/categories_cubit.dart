@@ -16,8 +16,8 @@ class CategoriesCubit extends Cubit<CategoriesStateUI> {
     failOrCategories.fold((fail) => emit(ErrorState(message: fail.message)), (
       categories,
     ) {
-      _categories = {for (var el in categories) el.name: el};
-      emit(LoadedState(categories: categories));
+      _categories = {for (var el in categories.response) el.name: el};
+      emit(LoadedState(categories: categories.response));
     });
   }
 

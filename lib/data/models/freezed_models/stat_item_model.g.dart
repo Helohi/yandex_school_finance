@@ -11,7 +11,7 @@ _StatItemModel _$StatItemModelFromJson(Map<String, dynamic> json) =>
       categoryId: (json['categoryId'] as num).toInt(),
       categoryName: json['categoryName'] as String,
       emoji: json['emoji'] as String,
-      amount: const DecimalConverter().fromJson(json['amount'] as String),
+      amount: const DecimalConverter().fromJson(json['amount']),
     );
 
 Map<String, dynamic> _$StatItemModelToJson(_StatItemModel instance) =>

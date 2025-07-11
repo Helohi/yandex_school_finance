@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 class DioDeserializerInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (options.extra["retryCount"] ?? 0 < 4) {
-      options.baseUrl = "https://httpstat.us"; // 503 Error/
-    }
-    return handler.next(options);
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
+    response.data = await workerManager.execute(
+      () => jsonDecode(response.data),
+    );
+    handler.next(response);
   }
 }

@@ -12,9 +12,7 @@ _AccountHistoryResponseModel _$AccountHistoryResponseModelFromJson(
   accountId: (json['accountId'] as num).toInt(),
   accountName: json['accountName'] as String,
   currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
-  currentBalance: const DecimalConverter().fromJson(
-    json['currentBalance'] as String,
-  ),
+  currentBalance: const DecimalConverter().fromJson(json['currentBalance']),
   history: (json['history'] as List<dynamic>)
       .map((e) => AccountHistoryModel.fromJson(e as Map<String, dynamic>))
       .toList(),

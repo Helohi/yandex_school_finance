@@ -10,7 +10,7 @@ _AccountUpdateRequestModel _$AccountUpdateRequestModelFromJson(
   Map<String, dynamic> json,
 ) => _AccountUpdateRequestModel(
   name: json['name'] as String,
-  balance: const DecimalConverter().fromJson(json['balance'] as String),
+  balance: const DecimalConverter().fromJson(json['balance']),
   currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
 );
 

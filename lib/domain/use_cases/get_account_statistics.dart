@@ -27,7 +27,7 @@ class GetAccountStatistics {
       DateTime currentDate = startDate;
       while (currentDate.isBefore(endDate) ||
           currentDate.isAtSameMomentAs(endDate)) {
-        map[currentDate] = transactions
+        map[currentDate] = transactions.response
             .where(
               (el) =>
                   (period == PeriodEnum.month

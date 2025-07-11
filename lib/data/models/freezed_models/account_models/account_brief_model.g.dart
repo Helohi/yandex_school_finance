@@ -10,7 +10,7 @@ _AccountBriefModel _$AccountBriefModelFromJson(Map<String, dynamic> json) =>
     _AccountBriefModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      balance: const DecimalConverter().fromJson(json['balance'] as String),
+      balance: const DecimalConverter().fromJson(json['balance']),
       currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
     );
 

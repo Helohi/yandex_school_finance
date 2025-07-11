@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:yandex_school_finance/core/interceptors/dio_deserializer_interceptor.dart';
 import 'package:yandex_school_finance/core/interceptors/dio_retry_interceptor.dart';
+import 'package:yandex_school_finance/data/datasources/drift/drift_database_datasource.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_bank_account_datasource.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_category_datasource.dart';
 import 'package:yandex_school_finance/data/datasources/swagger/swagger_transaction_datasource.dart';
 import 'package:yandex_school_finance/data/repositories/swagger_repositories/swagger_bank_account_repositories.dart';
 import 'package:yandex_school_finance/data/repositories/swagger_repositories/swagger_category_repository.dart';
+import 'package:yandex_school_finance/data/repositories/swagger_repositories/swagger_drift_connection.dart';
 import 'package:yandex_school_finance/data/repositories/swagger_repositories/swagger_transaction_repository.dart';
 import 'package:yandex_school_finance/domain/repositories/bank_account_repository.dart';
 import 'package:yandex_school_finance/domain/repositories/category_repository.dart';
@@ -26,10 +29,11 @@ void init() {
               baseUrl: "https://shmr-finance.ru/api/v1",
               headers: {"Authorization": "Bearer ${dotenv.env["TOKEN"]}"},
               contentType: "application/json",
+              responseType: ResponseType.plain,
             ),
           )
           ..interceptors.addAll([
-            // DioDeserializerInterceptor(),
+            DioDeserializerInterceptor(),
             DioRetryInterceptor(),
           ]),
   );
@@ -41,15 +45,24 @@ void init() {
 
   sl.registerFactory(() => SwaggerTransactionDatasource(sl()));
 
+  // NOT IN PRODUCTION
+  // sl.registerLazySingleton(() => DriftDatabaseDatasource()..dropEverything());
+  sl.registerLazySingleton(() => DriftDatabaseDatasource());
+
+  // Connectors
+  sl.registerFactory(
+    () => SwaggerDriftConnection(sl(), sl(), sl(), sl(), sl()),
+  );
+
   // Repositories
   sl.registerFactory<BankAccountRepository>(
-    () => SwaggerBankAccountRepositories(sl()),
+    () => SwaggerBankAccountRepositories(sl(), sl()),
   );
 
   sl.registerFactory<CategoryRepository>(() => SwaggerCategoryRepository(sl()));
 
   sl.registerFactory<TransactionRepository>(
-    () => SwaggerTransactionRepository(sl()),
+    () => SwaggerTransactionRepository(sl(), sl()),
   );
 
   // Use Cases

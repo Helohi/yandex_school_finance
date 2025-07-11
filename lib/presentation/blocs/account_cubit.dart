@@ -59,7 +59,7 @@ class AccountCubit extends Cubit<MainAccountStateUI> {
 
     failOrAccount.fold(
       (fail) => emit(AccountErrorState(message: fail.message)),
-      (account) => emit(AccountLoadedState(account: account)),
+      (account) => emit(AccountLoadedState(account: account.response)),
     );
   }
 
@@ -86,8 +86,8 @@ class AccountCubit extends Cubit<MainAccountStateUI> {
     failOrAccount.fold(
       (fail) => emit(AccountErrorState(message: fail.message)),
       (account) {
-        _currentAccount = account;
-        emit(AccountLoadedState(account: account));
+        _currentAccount = account.response;
+        emit(AccountLoadedState(account: account.response));
       },
     );
   }
