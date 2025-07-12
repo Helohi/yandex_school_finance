@@ -19,8 +19,6 @@ class GetCurrentAccountTransactionsInPeriod {
     DateTime? startDate,
     DateTime? endDate,
   ]) async {
-    final failOrAccounts = await _accountRepository.getAccounts();
-
     if (startDate != null && endDate != null) {
       if (startDate.isAfter(endDate)) {
         endDate = startDate;
@@ -29,16 +27,20 @@ class GetCurrentAccountTransactionsInPeriod {
       }
     }
 
+    final failOrAccounts = await _accountRepository.getAccounts();
+
     return failOrAccounts.fold(Left.new, (accounts) async {
       final failOrTransactions = await _transactionRepository
           .getTransactionsInPeriod(
-            accounts.first.id,
+            accounts.response.first.id,
             startDate: startDate,
             endDate: endDate,
           );
       return failOrTransactions.fold(Left.new, (transactions) {
         return Right(
-          transactions.where((el) => el.category.isIncome == isIncome).toList(),
+          transactions.response
+              .where((el) => el.category.isIncome == isIncome)
+              .toList(),
         );
       });
     });

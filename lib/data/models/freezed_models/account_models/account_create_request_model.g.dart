@@ -10,7 +10,7 @@ _AccountCreateRequestModel _$AccountCreateRequestModelFromJson(
   Map<String, dynamic> json,
 ) => _AccountCreateRequestModel(
   name: json['name'] as String,
-  balance: const DecimalConverter().fromJson(json['balance'] as String),
+  balance: const DecimalConverter().fromJson(json['balance']),
   currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
 );
 

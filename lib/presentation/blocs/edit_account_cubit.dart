@@ -32,9 +32,9 @@ class EditAccountCubit extends Cubit<EditAccountUIState> {
       (account) => emit(
         LoadedState(
           accountResponseModel: AccountUpdateRequestModel(
-            name: account.name,
-            balance: account.balance,
-            currency: account.currency,
+            name: account.response.name,
+            balance: account.response.balance,
+            currency: account.response.currency,
           ),
         ),
       ),

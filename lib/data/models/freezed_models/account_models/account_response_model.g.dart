@@ -11,7 +11,7 @@ _AccountResponseModel _$AccountResponseModelFromJson(
 ) => _AccountResponseModel(
   id: (json['id'] as num).toInt(),
   name: json['name'] as String,
-  balance: const DecimalConverter().fromJson(json['balance'] as String),
+  balance: const DecimalConverter().fromJson(json['balance']),
   currency: $enumDecode(_$CurrencyEnumEnumMap, json['currency']),
   incomeStats: (json['incomeStats'] as List<dynamic>)
       .map((e) => StatItemModel.fromJson(e as Map<String, dynamic>))

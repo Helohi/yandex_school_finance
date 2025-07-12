@@ -13,7 +13,7 @@ class GetCurrentAccount {
 
     return failOrAccounts.fold(
       (fail) => Left(fail),
-      (accounts) => Right(accounts.first),
+      (accounts) => Right(accounts.response.first),
     );
   }
 }

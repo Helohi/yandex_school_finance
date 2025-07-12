@@ -12,7 +12,7 @@ _TransactionResponseModel _$TransactionResponseModelFromJson(
   id: (json['id'] as num).toInt(),
   account: AccountBriefModel.fromJson(json['account'] as Map<String, dynamic>),
   category: CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
-  amount: const DecimalConverter().fromJson(json['amount'] as String),
+  amount: const DecimalConverter().fromJson(json['amount']),
   transactionDate: const DateTimeConverter().fromJson(
     json['transactionDate'] as String,
   ),

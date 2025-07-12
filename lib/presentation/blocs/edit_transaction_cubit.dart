@@ -30,7 +30,7 @@ class EditTransactionCubit extends Cubit<EditTransactionUIState> {
       (fail) => emit(AccountsErrorState(message: fail.message)),
       (accounts) => emit(
         AccountsLoadedState(
-          accounts: accounts
+          accounts: accounts.response
               .map((el) => AccountBriefModel.fromAccountModel(el))
               .toList(),
         ),
@@ -47,7 +47,7 @@ class EditTransactionCubit extends Cubit<EditTransactionUIState> {
       (fail) => emit(CategoriesErrorState(message: fail.message)),
       (categories) => emit(
         CategoriesLoadedState(
-          categories: categories
+          categories: categories.response
               .where((category) => category.isIncome == isIncome)
               .toList(),
         ),

@@ -11,7 +11,7 @@ _TransactionRequestModel _$TransactionRequestModelFromJson(
 ) => _TransactionRequestModel(
   accountId: (json['accountId'] as num).toInt(),
   categoryId: (json['categoryId'] as num).toInt(),
-  amount: const DecimalConverter().fromJson(json['amount'] as String),
+  amount: const DecimalConverter().fromJson(json['amount']),
   transactionDate: const DateTimeConverter().fromJson(
     json['transactionDate'] as String,
   ),
