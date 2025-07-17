@@ -1,3 +1,4 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'dart:math';
 
 import 'package:animated_finance_pie_chart/animated_finance_pie_chart.dart';
@@ -40,7 +41,7 @@ class _AnalysesPageState extends State<AnalysesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Анализ"),
+        title: Text(AppLocalizations.of(context).analysis),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -49,12 +50,12 @@ class _AnalysesPageState extends State<AnalysesPage> {
           Column(
             children: [
               AnalysesRangeTile(
-                title: "Период:начало",
+                title: AppLocalizations.of(context).period_start,
                 onPressed: _showDateRangePicker,
                 dateToShow: _selectedRange.start,
               ),
               AnalysesRangeTile(
-                title: "Период:конец",
+                title: AppLocalizations.of(context).period_end,
                 onPressed: _showDateRangePicker,
                 dateToShow: _selectedRange.end,
               ),
@@ -62,7 +63,7 @@ class _AnalysesPageState extends State<AnalysesPage> {
               /// sum
               if (_sumOfCurrentTransactions != null)
                 ListTile(
-                  title: Text("Сумма"),
+                  title: Text(AppLocalizations.of(context).total),
                   trailing: Text(
                     "${_sumOfCurrentTransactions!.formatWithSpaces()} ₽",
                   ),
@@ -150,7 +151,7 @@ class _AnalysesPageState extends State<AnalysesPage> {
                   return BackgroundBarrier(child: CenteredProgressIndicator());
                 case ErrorState():
                   return BackgroundBarrier(
-                    child: CenteredErrorText(message: state.message),
+                    child: CenteredErrorText(message: state.message(context)),
                   );
                 case LoadedState():
                   return SizedBox.shrink();

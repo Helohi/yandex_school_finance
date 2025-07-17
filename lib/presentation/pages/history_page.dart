@@ -1,3 +1,4 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Moя история"),
+        title: Text(AppLocalizations.of(context).my_history),
         centerTitle: true,
         actions: [
           IconButton(
@@ -50,17 +51,17 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Column(
         children: [
           TopListTile(
-            title: "Начало",
+            title: AppLocalizations.of(context).start,
             trailing: Text(_selectedRange.start.toHumanString()),
             onTap: _changeDateRange,
           ),
           TopListTile(
-            title: "Конец",
+            title: AppLocalizations.of(context).end,
             trailing: Text(_selectedRange.end.toHumanString()),
             onTap: _changeDateRange,
           ),
           TopListTile(
-            title: "Сортировка",
+            title: AppLocalizations.of(context).sort,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -73,8 +74,8 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
                 SegmentedButton(
                   segments: [
-                    ButtonSegment(value: "byDate", label: Text("Дата")),
-                    ButtonSegment(value: "byAmount", label: Text("Сумма")),
+                    ButtonSegment(value: "byDate", label: Text(AppLocalizations.of(context).date)),
+                    ButtonSegment(value: "byAmount", label: Text(AppLocalizations.of(context).total)),
                   ],
                   showSelectedIcon: false,
                   selected: _currentSortType,
@@ -86,7 +87,7 @@ class _HistoryPageState extends State<HistoryPage> {
           BlocBuilder<HistoryCubit, HistoryUIState>(
             builder: (context, state) => switch (state) {
               LoadedState() => TopListTile(
-                title: "Всего",
+                title: AppLocalizations.of(context).total,
                 trailing: Text(
                   "${TransactionResponseModel.sumOfTransactions(state.transactions).formatWithSpaces()} ₽",
                 ),
@@ -123,7 +124,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               ErrorState() => Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: Text(state.message),
+                child: Text(state.message(context)),
               ),
             },
           ),

@@ -1,3 +1,4 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,14 +107,18 @@ class _BlocedEditTransactionDialogState
             });
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ).showSnackBar(SnackBar(content: Text(state.message(context))));
         }
       },
       child: Stack(
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text(widget.isIncome ? "Мои доходы" : "Мои расходы"),
+              title: Text(
+                widget.isIncome
+                    ? AppLocalizations.of(context).my_incomes
+                    : AppLocalizations.of(context).my_outcomes,
+              ),
               centerTitle: true,
               leading: IconButton(
                 onPressed: () => Navigator.pop(context),
@@ -131,7 +136,7 @@ class _BlocedEditTransactionDialogState
                 /// account
                 AccountTopTile(
                   tileColor: Colors.white,
-                  leadingLabel: "Счет",
+                  leadingLabel: AppLocalizations.of(context).account,
                   trailingLabel:
                       BlocBuilder<EditTransactionCubit, EditTransactionUIState>(
                         buildWhen: (previous, current) =>
@@ -143,14 +148,16 @@ class _BlocedEditTransactionDialogState
                           return switch (state) {
                             AccountsLoadingState() =>
                               const CircularProgressIndicator(),
-                            AccountsErrorState() => Text(state.message),
+                            AccountsErrorState() => Text(
+                              state.message(context),
+                            ),
                             AccountsLoadedState() =>
                               DropdownButton<AccountBriefModel>(
                                 iconSize: 0.0,
                                 underline: const SizedBox.shrink(),
                                 alignment: Alignment.centerRight,
                                 hint: Text(
-                                  "Не выбрано",
+                                  AppLocalizations.of(context).not_chosen,
                                   style: TextStyle(color: Colors.grey),
                                 ),
                                 items: List.generate(
@@ -172,7 +179,7 @@ class _BlocedEditTransactionDialogState
                 /// category
                 AccountTopTile(
                   tileColor: Colors.white,
-                  leadingLabel: "Статья",
+                  leadingLabel: AppLocalizations.of(context).category,
                   trailingLabel:
                       BlocBuilder<EditTransactionCubit, EditTransactionUIState>(
                         buildWhen: (previous, current) =>
@@ -184,14 +191,16 @@ class _BlocedEditTransactionDialogState
                           return switch (state) {
                             CategoriesLoadingState() =>
                               const CircularProgressIndicator(),
-                            CategoriesErrorState() => Text(state.message),
+                            CategoriesErrorState() => Text(
+                              state.message(context),
+                            ),
                             CategoriesLoadedState() =>
                               DropdownButton<CategoryModel>(
                                 iconSize: 0.0,
                                 underline: const SizedBox.shrink(),
                                 alignment: Alignment.centerRight,
                                 hint: Text(
-                                  "Не выбрано",
+                                  AppLocalizations.of(context).not_chosen,
                                   style: TextStyle(color: Colors.grey),
                                 ),
                                 items: List.generate(
@@ -215,7 +224,7 @@ class _BlocedEditTransactionDialogState
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Сумма"),
+                      Text(AppLocalizations.of(context).total),
                       SizedBox(width: 16),
                       Flexible(
                         child: TextField(
@@ -246,7 +255,10 @@ class _BlocedEditTransactionDialogState
                   onTap: _showDatePicker,
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text("Дата"), Text(_chosenDate.toHumanString())],
+                    children: [
+                      Text(AppLocalizations.of(context).date),
+                      Text(_chosenDate.toHumanString()),
+                    ],
                   ),
                 ),
 
@@ -255,7 +267,7 @@ class _BlocedEditTransactionDialogState
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Время"),
+                      Text(AppLocalizations.of(context).time),
                       Text(
                         "${_chosenDate.hour.toString().padLeft(2, '0')}:${_chosenDate.minute.toString().padLeft(2, '0')}",
                       ),
@@ -269,7 +281,7 @@ class _BlocedEditTransactionDialogState
                     controller: _commentController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Комментарий",
+                      hintText: AppLocalizations.of(context).comment,
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -296,7 +308,9 @@ class _BlocedEditTransactionDialogState
                               .deleteTransaction(widget.transaction!.id);
                         }
                       },
-                      child: Text("Удалить расход"),
+                      child: Text(
+                        AppLocalizations.of(context).remove_transaction,
+                      ),
                     ),
                   ),
               ],
@@ -362,7 +376,7 @@ class _BlocedEditTransactionDialogState
         builder: (context) => AlertDialog(
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.red,
-          title: const Text("Заполните все поля!"),
+          title: Text(AppLocalizations.of(context).fill_all_fields),
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -378,7 +392,7 @@ class _BlocedEditTransactionDialogState
                 ),
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text("OK"),
+              child: Text(AppLocalizations.of(context).ok),
             ),
           ],
           actionsAlignment: MainAxisAlignment.center,

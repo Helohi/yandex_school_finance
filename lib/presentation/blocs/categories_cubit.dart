@@ -1,3 +1,5 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/category_model.dart';
@@ -23,7 +25,11 @@ class CategoriesCubit extends Cubit<CategoriesStateUI> {
 
   void fuzzySearch(String query) {
     if (_categories == null) {
-      return emit(ErrorState(message: "Нет таких категорий"));
+      return emit(
+        ErrorState(
+          message: (context) => AppLocalizations.of(context).no_such_categories,
+        ),
+      );
     }
 
     final fuse = Fuzzy(_categories!.keys.toList());
@@ -50,7 +56,7 @@ class LoadedState extends CategoriesStateUI {
 }
 
 class ErrorState extends CategoriesStateUI {
-  final String message;
+  final String Function(BuildContext context) message;
 
   ErrorState({required this.message});
 }

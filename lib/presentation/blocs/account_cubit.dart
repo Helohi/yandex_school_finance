@@ -1,4 +1,6 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:decimal/decimal.dart';
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/enums/currency_enum.dart';
 import 'package:yandex_school_finance/core/enums/period_enum.dart';
@@ -36,7 +38,12 @@ class AccountCubit extends Cubit<MainAccountStateUI> {
 
   Future<void> updateAccount(int id, AccountUpdateRequestModel account) async {
     if (_currentAccount == null) {
-      emit(AccountErrorState(message: "Счет не был загружен"));
+      emit(
+        AccountErrorState(
+          message: (context) =>
+              AppLocalizations.of(context).account_was_not_loaded,
+        ),
+      );
       return;
     }
 
@@ -65,7 +72,12 @@ class AccountCubit extends Cubit<MainAccountStateUI> {
 
   Future<void> changeCurrency(CurrencyEnum currency) async {
     if (_currentAccount == null) {
-      emit(AccountErrorState(message: "Счет не был выбран"));
+      emit(
+        AccountErrorState(
+          message: (context) =>
+              AppLocalizations.of(context).account_was_not_chosen,
+        ),
+      );
     }
     emit(AccountLoadingState());
 
@@ -102,7 +114,12 @@ class AccountCubit extends Cubit<MainAccountStateUI> {
     };
 
     if (_currentAccount == null) {
-      emit(AccountStatisticsErrorState(message: "Счет не был загружен"));
+      emit(
+        AccountStatisticsErrorState(
+          message: (context) =>
+              AppLocalizations.of(context).account_was_not_chosen,
+        ),
+      );
       return;
     }
 
@@ -135,7 +152,7 @@ class AccountLoadedState extends AccountStateUI {
 }
 
 class AccountErrorState extends AccountStateUI {
-  final String message;
+  final String Function(BuildContext context) message;
 
   AccountErrorState({required this.message});
 }
@@ -151,7 +168,7 @@ class AccountStatisticsLoadedState extends AccountStatisticsStateUI {
 }
 
 class AccountStatisticsErrorState extends AccountStatisticsStateUI {
-  final String message;
+  final String Function(BuildContext context) message;
 
   AccountStatisticsErrorState({required this.message});
 }
