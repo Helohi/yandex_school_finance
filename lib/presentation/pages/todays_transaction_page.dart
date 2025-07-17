@@ -1,8 +1,10 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yandex_school_finance/core/extensions/number_formatting.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart';
+import 'package:yandex_school_finance/presentation/blocs/material_app_cubit.dart';
 import 'package:yandex_school_finance/presentation/blocs/transaction_cubit.dart';
 import 'package:yandex_school_finance/presentation/pages/edit_transaction_dialog.dart';
 import 'package:yandex_school_finance/presentation/widgets/centered_error_text.dart';
@@ -31,7 +33,9 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.isIncome ? "Доходы" : "Расходы"} сегодня"),
+        title: Text(
+          "${widget.isIncome ? AppLocalizations.of(context).incomes : AppLocalizations.of(context).outcomes} ${AppLocalizations.of(context).today}",
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -47,13 +51,13 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
           return switch (state) {
             InitialState() => SizedBox.shrink(),
             LoadingState() => CenteredProgressIndicator(),
-            ErrorState() => CenteredErrorText(message: state.message),
+            ErrorState() => CenteredErrorText(message: state.message(context)),
             LoadedState() => Builder(
               builder: (context) {
                 return Column(
                   children: [
                     TopListTile(
-                      title: "Всего",
+                      title: AppLocalizations.of(context).total,
                       trailing: Text(
                         "${TransactionResponseModel.sumOfTransactions(state.transactions).formatWithSpaces()} ₽",
                       ),
@@ -84,28 +88,20 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            showDialog<bool>(
-              context: context,
-              builder: (context) =>
-                  EditTransactionDialog(isIncome: widget.isIncome),
-            ).then((isCreated) {
-              if (isCreated == true && context.mounted) {
-                context.read<TransactionCubit>().loadTodayTransactions(
-                  widget.isIncome,
-                );
-              }
-            }),
+        onPressed: () {
+          context.read<MaterialAppCubit>().triggerHapticFeedback();
+          _showModifyTransactionDialog()();
+        },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void Function() _showModifyTransactionDialog(
-    TransactionResponseModel transaction,
-  ) {
+  void Function() _showModifyTransactionDialog([
+    TransactionResponseModel? transaction,
+  ]) {
     return () =>
-        showDialog(
+        showDialog<bool>(
           context: context,
           builder: (context) => EditTransactionDialog(
             isIncome: widget.isIncome,

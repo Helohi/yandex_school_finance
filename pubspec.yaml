@@ -54,6 +54,12 @@ dependencies:
   decimal: ^3.2.1
   dio: ^5.8.0+1
   worker_manager: ^7.2.6
+  shared_preferences: ^2.5.3
+  flutter_colorpicker: ^1.1.0
+  local_auth: ^2.3.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +100,7 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

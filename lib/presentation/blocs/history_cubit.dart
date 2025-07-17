@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/transaction_models/transaction_response_model.dart'
     show TransactionResponseModel;
@@ -60,7 +61,7 @@ class LoadedState extends HistoryUIState {
 }
 
 class ErrorState extends HistoryUIState {
-  final String message;
+  final String Function(BuildContext context) message;
 
   ErrorState({required this.message});
 }

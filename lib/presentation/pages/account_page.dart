@@ -1,3 +1,4 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:decimal/decimal.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Мой счет"),
+        title: Text(AppLocalizations.of(context).my_account),
         centerTitle: true,
         actions: [
           BlocBuilder<AccountCubit, MainAccountStateUI>(
@@ -119,7 +120,7 @@ class _AccountPageState extends State<AccountPage> {
 
                 /// currency
                 AccountTopTile(
-                  leadingLabel: "Валюта",
+                  leadingLabel: AppLocalizations.of(context).currency,
                   trailingLabel: Text(
                     state.account.currency.symbol,
                     style: Theme.of(
@@ -141,9 +142,9 @@ class _AccountPageState extends State<AccountPage> {
                     segments: [
                       ButtonSegment(
                         value: PeriodEnum.month,
-                        label: Text("Месяц"),
+                        label: Text(AppLocalizations.of(context).month),
                       ),
-                      ButtonSegment(value: PeriodEnum.year, label: Text("Год")),
+                      ButtonSegment(value: PeriodEnum.year, label: Text(AppLocalizations.of(context).year)),
                     ],
                     selected: _selectedPeriod,
                     onSelectionChanged: (value) {
@@ -239,7 +240,7 @@ class _AccountPageState extends State<AccountPage> {
                             } else if (state is AccountStatisticsErrorState) {
                               return BackgroundBarrier(
                                 child: CenteredErrorText(
-                                  message: state.message,
+                                  message: state.message(context),
                                 ),
                               );
                             }
@@ -252,7 +253,9 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ],
             ),
-            AccountErrorState() => CenteredErrorText(message: state.message),
+            AccountErrorState() => CenteredErrorText(
+              message: state.message(context),
+            ),
           };
         },
       ),
@@ -310,7 +313,7 @@ class _AccountPageState extends State<AccountPage> {
                   iconColor: Colors.white,
                   tileColor: Color(0xffE46962),
                   leading: Icon(Icons.cancel_outlined),
-                  title: Text("Отмена"),
+                  title: Text(AppLocalizations.of(context).cancel),
                   onTap: () => Navigator.of(context).pop(),
                 ),
               ],

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yandex_school_finance/core/interceptors/dio_deserializer_interceptor.dart';
 import 'package:yandex_school_finance/core/interceptors/dio_retry_interceptor.dart';
 import 'package:yandex_school_finance/data/datasources/drift/drift_database_datasource.dart';
@@ -21,7 +22,7 @@ import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.da
 
 final sl = GetIt.instance;
 
-void init() {
+Future<void> init() async {
   sl.registerLazySingleton(
     () =>
         Dio(
@@ -70,4 +71,9 @@ void init() {
   sl.registerFactory(() => GetTodayTransactions(sl()));
   sl.registerFactory(() => GetCurrentAccount(sl()));
   sl.registerFactory(() => GetAccountStatistics(sl()));
+
+  // Shared Preferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.clear();
+  sl.registerLazySingleton(() => sharedPreferences);
 }

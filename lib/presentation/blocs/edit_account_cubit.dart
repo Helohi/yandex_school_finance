@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_model.dart';
 import 'package:yandex_school_finance/data/models/freezed_models/account_models/account_update_request_model.dart';
@@ -8,7 +9,7 @@ class EditAccountCubit extends Cubit<EditAccountUIState> {
 
   final BankAccountRepository accountRepository;
 
-  void showError(String message) => emit(ErrorState(message: message));
+  void showError(String message) => emit(ErrorState(message: (_) => message));
 
   void showAccount(AccountModel account) {
     emit(LoadingState());
@@ -55,7 +56,7 @@ class LoadedState extends EditAccountUIState {
 }
 
 class ErrorState extends EditAccountUIState {
-  final String message;
+  final String Function(BuildContext context) message;
 
   ErrorState({required this.message});
 }

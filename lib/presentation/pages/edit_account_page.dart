@@ -1,3 +1,4 @@
+import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +38,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
       });
 
     if (widget.id == null || int.tryParse(widget.id!) == null) {
-      context.read<EditAccountCubit>().showError("Неверный id");
+      context.read<EditAccountCubit>().showError(
+        AppLocalizations.of(context).incorrect_id,
+      );
     } else if (widget.account != null) {
       context.read<EditAccountCubit>().showAccount(widget.account!);
     } else {
@@ -56,7 +59,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Мой счет"),
+        title: Text(AppLocalizations.of(context).my_account),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -78,7 +81,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             case InitialState() || LoadingState():
               return CenteredProgressIndicator();
             case ErrorState():
-              return CenteredErrorText(message: state.message);
+              return CenteredErrorText(message: state.message(context));
             case LoadedState():
               _currency = state.accountResponseModel.currency;
               if (_nameController.text.isEmpty) {
@@ -106,7 +109,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
                                     controller: _nameController,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: "Название",
+                                      hintText: AppLocalizations.of(
+                                        context,
+                                      ).name,
                                     ),
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -118,7 +123,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
                                     controller: _balanceController,
                                     textAlign: TextAlign.right,
                                     decoration: InputDecoration(
-                                      hintText: "Баланс",
+                                      hintText: AppLocalizations.of(
+                                        context,
+                                      ).balance,
                                       border: InputBorder.none,
                                       suffix: Text(
                                         state
@@ -157,7 +164,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       onPressed: () {
                         // We have only one account, kakoy udalit
                       },
-                      child: Text("Удалить счет"),
+                      child: Text(AppLocalizations.of(context).remove_account),
                     ),
                   ),
                 ],
@@ -170,13 +177,17 @@ class _EditAccountPageState extends State<EditAccountPage> {
 
   void _sendNewAccountAndClose() {
     if (Decimal.tryParse(_balanceController.text) == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Неправильно введен баланс")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).incorrect_balance_entered),
+        ),
+      );
       return;
     } else if (_currency == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Аккаунт не загружен, попробуйте позже")),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).account_is_not_loaded),
+        ),
       );
       return;
     }
