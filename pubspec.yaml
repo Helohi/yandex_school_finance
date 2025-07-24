@@ -60,6 +60,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,8 @@ dev_dependencies:
   drift_dev: ^2.27.0
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.6
+  mockito: ^5.4.6
+  alchemist: ^0.12.1
 
 flutter_launcher_icons:
   android: true
@@ -93,7 +96,6 @@ flutter_native_splash:
     image: "assets/splash.png"
   web: false
   fullscreen: true
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -31,12 +33,12 @@ class AppRouter {
 
   static GoRouter get router => GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: "/settings",
+    initialLocation: "/spends",
     redirect: (context, state) {
       if (context.read<MaterialAppCubit>().isAuthenticated) {
-        return state.fullPath;
+        return state.matchedLocation;
       }
-      _afterPinRedirect = state.fullPath;
+      _afterPinRedirect = state.matchedLocation;
       return "/pin";
     },
 
@@ -45,11 +47,16 @@ class AppRouter {
       GoRoute(
         path: "/pin",
         builder: (context, state) => PinCodePage(
-          onBiometricsPassed: () {
-            context.read<MaterialAppCubit>().auth();
-            if (_afterPinRedirect == state.fullPath) _afterPinRedirect = null;
-            return _afterPinRedirect ?? "/spends";
-          },
+          onBiometricsPassed:
+              context.read<MaterialAppCubit>().isBiometricEnabled ?? false
+              ? () {
+                  context.read<MaterialAppCubit>().auth();
+                  if (_afterPinRedirect == state.fullPath) {
+                    _afterPinRedirect = null;
+                  }
+                  return _afterPinRedirect ?? "/spends";
+                }
+              : null,
           onSubmitGoTo: (pin) {
             if (context.read<MaterialAppCubit>().checkPin(pin)) {
               context.read<MaterialAppCubit>().auth();
@@ -107,6 +114,7 @@ class AppRouter {
                     path: "/edit/:id",
                     builder: (_, state) {
                       final account = state.extra as AccountModel?;
+                      log("id: ${state.pathParameters}");
                       return BlocProvider(
                         create: (context) => EditAccountCubit(sl()),
                         child: EditAccountPage(

@@ -74,6 +74,6 @@ Future<void> init() async {
 
   // Shared Preferences
   final sharedPreferences = await SharedPreferences.getInstance();
-  sharedPreferences.clear();
-  sl.registerLazySingleton(() => sharedPreferences);
+  // sharedPreferences.clear();
+  sl.registerSingleton<SharedPreferences>(sharedPreferences);
 }

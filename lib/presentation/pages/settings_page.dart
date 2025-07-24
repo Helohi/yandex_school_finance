@@ -84,19 +84,22 @@ class SettingsPage extends StatelessWidget {
   }
 
   void _showColorPicker(BuildContext blocContext) {
+    Color currentColor = blocContext.read<MaterialAppCubit>().primaryColor;
     showDialog(
       context: blocContext,
       builder: (context) => AlertDialog(
         content: SingleChildScrollView(
           child: ColorPicker(
-            pickerColor: blocContext.watch<MaterialAppCubit>().primaryColor,
-            onColorChanged: blocContext
-                .read<MaterialAppCubit>()
-                .changePrimaryColor,
+            pickerColor: currentColor,
+            onColorChanged: (color) => currentColor = color,
           ),
         ),
       ),
-    );
+    ).then((_) {
+      if (blocContext.mounted) {
+        blocContext.read<MaterialAppCubit>().changePrimaryColor(currentColor);
+      }
+    });
   }
 
   void _chooseHapticLevel(BuildContext blocContext) {
@@ -152,7 +155,9 @@ class SettingsPage extends StatelessWidget {
         }
       }
 
-      context.read<MaterialAppCubit>().setBiometricAuthentication(value);
+      if (context.mounted) {
+        context.read<MaterialAppCubit>().setBiometricAuthentication(value);
+      }
     }
 
     return inner;

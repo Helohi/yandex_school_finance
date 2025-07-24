@@ -61,6 +61,7 @@ class _AccountPageState extends State<AccountPage> {
             builder: (context, state) {
               if (state is! AccountLoadedState) return SizedBox.shrink();
               return IconButton(
+                key: ValueKey("AccountEdit button"),
                 onPressed: () async {
                   final newAccount = await context.push<AccountUpdateRequestModel>(
                     "${GoRouterState.of(context).uri}/edit/${state.account.id}",
@@ -144,7 +145,10 @@ class _AccountPageState extends State<AccountPage> {
                         value: PeriodEnum.month,
                         label: Text(AppLocalizations.of(context).month),
                       ),
-                      ButtonSegment(value: PeriodEnum.year, label: Text(AppLocalizations.of(context).year)),
+                      ButtonSegment(
+                        value: PeriodEnum.year,
+                        label: Text(AppLocalizations.of(context).year),
+                      ),
                     ],
                     selected: _selectedPeriod,
                     onSelectionChanged: (value) {
