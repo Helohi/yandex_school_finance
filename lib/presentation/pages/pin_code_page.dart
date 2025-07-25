@@ -122,7 +122,7 @@ class _PinCodePageState extends State<PinCodePage> {
       options: AuthenticationOptions(biometricOnly: true),
     );
 
-    if (isAuthenticated && widget.onBiometricsPassed != null) {
+    if (isAuthenticated && widget.onBiometricsPassed != null && mounted) {
       log(widget.onBiometricsPassed!().toString());
       context.go(widget.onBiometricsPassed!());
     }

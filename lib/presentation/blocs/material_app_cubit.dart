@@ -7,9 +7,12 @@ import 'package:yandex_school_finance/core/app_themes.dart';
 import 'package:yandex_school_finance/core/service_locator.dart';
 
 class MaterialAppCubit extends Cubit<MaterialAppState> {
-  MaterialAppCubit() : super(MaterialAppState());
+  MaterialAppCubit(this.sharedPref, this.localAuthentication)
+    : super(MaterialAppState());
 
   bool isAuthenticated = false;
+  final SharedPreferences sharedPref;
+  final LocalAuthentication localAuthentication;
 
   /// Getting from Shared Preferences
   ThemeMode themeMode = ThemeMode.light;
@@ -20,7 +23,6 @@ class MaterialAppCubit extends Cubit<MaterialAppState> {
   bool? isBiometricEnabled;
 
   void loadFromSharedPreferences() {
-    final sharedPref = sl.get<SharedPreferences>();
     themeMode = ThemeMode.values.byName(
       sharedPref.getString("Theme") ?? 'light',
     );
@@ -36,7 +38,7 @@ class MaterialAppCubit extends Cubit<MaterialAppState> {
 
     locale = Locale(sharedPref.getString("Locale") ?? "ru");
 
-    LocalAuthentication().getAvailableBiometrics().then((availableBiometrics) {
+    localAuthentication.getAvailableBiometrics().then((availableBiometrics) {
       if (availableBiometrics.isNotEmpty) {
         isBiometricEnabled = sharedPref.getBool("Biometrics") ?? false;
       }

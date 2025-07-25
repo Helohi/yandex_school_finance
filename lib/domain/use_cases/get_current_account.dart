@@ -12,7 +12,7 @@ class GetCurrentAccount {
     final failOrAccounts = await accountRepository.getAccounts();
 
     return failOrAccounts.fold(
-      (fail) => Left(fail),
+      Left.new,
       (accounts) => Right(accounts.response.first),
     );
   }

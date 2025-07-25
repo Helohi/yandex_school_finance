@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +40,14 @@ class _EditAccountPageState extends State<EditAccountPage> {
       });
 
     if (widget.id == null || int.tryParse(widget.id!) == null) {
-      context.read<EditAccountCubit>().showError(
-        AppLocalizations.of(context).incorrect_id,
-      );
+      log("No widget.id or int cannot parse it:\n${widget.id}");
+      Future.delayed(Duration.zero, () {
+        if (mounted) {
+          context.read<EditAccountCubit>().showError(
+            AppLocalizations.of(context).incorrect_id,
+          );
+        }
+      });
     } else if (widget.account != null) {
       context.read<EditAccountCubit>().showAccount(widget.account!);
     } else {
@@ -69,6 +76,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         ),
         actions: [
           IconButton(
+            key: ValueKey("DoneIconButton"),
             onPressed: _sendNewAccountAndClose,
             icon: Icon(Icons.done),
           ),
@@ -106,6 +114,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                               children: [
                                 Flexible(
                                   child: TextField(
+                                    key: ValueKey("NameTextField"),
                                     controller: _nameController,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,

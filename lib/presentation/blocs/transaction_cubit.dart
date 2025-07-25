@@ -10,18 +10,23 @@ class TransactionCubit extends Cubit<TransactionUIState> {
   final GetTodayTransactions getTodaysTransactions;
 
   Future<void> loadTodayTransactions(bool isIncome) async {
-    emit(LoadingState());
+    safeEmit(LoadingState());
 
     final failOrTransactions = await getTodaysTransactions(isIncome);
 
     failOrTransactions.fold(
       (Failure fail) {
-        emit(ErrorState(message: fail.message));
+        safeEmit(ErrorState(message: fail.message));
       },
       (List<TransactionResponseModel> transactions) {
-        emit(LoadedState(transactions: transactions));
+        safeEmit(LoadedState(transactions: transactions));
       },
     );
+  }
+
+  void safeEmit(TransactionUIState state) {
+    if (isClosed) return;
+    return emit(state);
   }
 }
 

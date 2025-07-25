@@ -36,6 +36,7 @@ class NavigationBarPage extends StatelessWidget {
               label: AppLocalizations.of(context).incomes,
             ),
             NavigationDestination(
+              key: ValueKey("AccountPage button"),
               icon: SvgPicture.asset(
                 "assets/icons/calculator.svg",
                 colorFilter: _currentColorFilter(context, 2),

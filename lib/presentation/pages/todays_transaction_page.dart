@@ -108,7 +108,7 @@ class _TodaysTransactionsPageState extends State<TodaysTransactionsPage> {
             transaction: transaction,
           ),
         ).then((isCreated) {
-          if (isCreated == true && context.mounted) {
+          if (isCreated == true && mounted) {
             context.read<TransactionCubit>().loadTodayTransactions(
               widget.isIncome,
             );
