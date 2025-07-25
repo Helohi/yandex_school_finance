@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_school_finance/core/app_router.dart';
 import 'package:yandex_school_finance/core/app_themes.dart';
+import 'package:yandex_school_finance/core/service_locator.dart';
 import 'package:yandex_school_finance/l10n/gen/app_localizations.dart';
 import 'package:yandex_school_finance/presentation/blocs/material_app_cubit.dart';
 
@@ -11,7 +12,7 @@ class FinanceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MaterialAppCubit()..loadFromSharedPreferences(),
+      create: (_) => MaterialAppCubit(sl(), sl())..loadFromSharedPreferences(),
       child: _BlocedFinanceApp(key: key),
     );
   }

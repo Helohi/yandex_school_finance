@@ -1,7 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yandex_school_finance/core/interceptors/dio_deserializer_interceptor.dart';
 import 'package:yandex_school_finance/core/interceptors/dio_retry_interceptor.dart';
@@ -20,10 +25,50 @@ import 'package:yandex_school_finance/domain/use_cases/get_account_statistics.da
 import 'package:yandex_school_finance/domain/use_cases/get_current_account.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_current_account_transactions_in_period.dart';
 import 'package:yandex_school_finance/domain/use_cases/get_today_transactions.dart';
+import 'package:yandex_school_finance/presentation/pages/material_app.dart';
+import 'package:yandex_school_finance/core/service_locator.dart' as di;
 
-final sl = GetIt.instance;
+import 'edit_account_test.mocks.dart';
 
-Future<void> init() async {
+@GenerateMocks([LocalAuthentication, DriftDatabaseDatasource])
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    await dotenv.load();
+    await di.init();
+    // await mockedDiInit();
+  });
+
+  testWidgets("Account name changing", (tester) async {
+    await tester.pumpWidget(const FinanceApp());
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(ValueKey("AccountPage button")));
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(ValueKey("AccountEdit button")));
+
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(ValueKey("NameTextField")),
+      "accountTest",
+    );
+
+    await tester.tap(find.byKey(ValueKey("DoneIconButton")));
+
+    await tester.pumpAndSettle();
+
+    expect(find.text("accountTest"), findsOneWidget);
+  });
+}
+
+Future<void> mockedDiInit() async {
+  final sl = GetIt.instance;
+
   sl.registerLazySingleton(
     () =>
         Dio(
@@ -40,7 +85,9 @@ Future<void> init() async {
           ]),
   );
 
-  sl.registerFactory(() => LocalAuthentication());
+  final localAuth = MockLocalAuthentication();
+  when(localAuth.getAvailableBiometrics()).thenAnswer((_) async => []);
+  sl.registerFactory<LocalAuthentication>(() => localAuth);
 
   // DataSources
   sl.registerFactory(() => SwaggerBankAccountDatasource(sl()));
@@ -49,9 +96,10 @@ Future<void> init() async {
 
   sl.registerFactory(() => SwaggerTransactionDatasource(sl()));
 
-  // NOT IN PRODUCTION
-  // sl.registerLazySingleton(() => DriftDatabaseDatasource()..dropEverything());
-  sl.registerLazySingleton(() => DriftDatabaseDatasource());
+  final driftDatabaseDatasource = MockDriftDatabaseDatasource();
+  sl.registerLazySingleton<DriftDatabaseDatasource>(
+    () => driftDatabaseDatasource,
+  );
 
   // Connectors
   sl.registerFactory(
@@ -76,6 +124,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetAccountStatistics(sl()));
 
   // Shared Preferences
+  SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
   // sharedPreferences.clear();
   sl.registerSingleton<SharedPreferences>(sharedPreferences);
