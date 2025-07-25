@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:mockito/annotations.dart';
-import 'package:yandex_school_finance/data/datasources/drift/drift_database_datasource.dart';
 import 'package:yandex_school_finance/presentation/pages/material_app.dart';
 import 'package:yandex_school_finance/core/service_locator.dart' as di;
 
-@GenerateMocks([LocalAuthentication, DriftDatabaseDatasource])
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
