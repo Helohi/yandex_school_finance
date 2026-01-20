@@ -14,15 +14,10 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
   final SwaggerBankAccountDatasource _bankAccountDatasource;
   final SwaggerDriftConnection _driftConnection;
 
-  SwaggerBankAccountRepositories(
-    this._bankAccountDatasource,
-    this._driftConnection,
-  );
+  SwaggerBankAccountRepositories(this._bankAccountDatasource, this._driftConnection);
 
   @override
-  Future<Either<Failure, SyncedResponse<AccountModel>>> getAccountById(
-    int id,
-  ) async {
+  Future<Either<Failure, SyncedResponse<AccountModel>>> getAccountById(int id) async {
     final bool isSynced = await _driftConnection.sync();
 
     try {
@@ -35,17 +30,11 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
   }
 
   @override
-  Future<Either<Failure, SyncedResponse<AccountHistoryResponseModel>>>
-  getAccountHistory(int id) async {
+  Future<Either<Failure, SyncedResponse<AccountHistoryResponseModel>>> getAccountHistory(int id) async {
     final isSynced = await _driftConnection.sync();
 
     try {
-      return Right(
-        SyncedResponse(
-          await _bankAccountDatasource.getAccountHistory(id),
-          isSynced: isSynced,
-        ),
-      );
+      return Right(SyncedResponse(await _bankAccountDatasource.getAccountHistory(id), isSynced: isSynced));
     } on Failure catch (f) {
       return Left(f);
     } catch (e) {
@@ -55,17 +44,12 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
   }
 
   @override
-  Future<Either<Failure, SyncedResponse<List<AccountModel>>>>
-  getAccounts() async {
+  Future<Either<Failure, SyncedResponse<List<AccountModel>>>> getAccounts() async {
+    // trying to sync data
     final isSynced = await _driftConnection.sync();
 
     try {
-      return Right(
-        SyncedResponse(
-          await _driftConnection.getAccounts(),
-          isSynced: isSynced,
-        ),
-      );
+      return Right(SyncedResponse(await _driftConnection.getAccounts(), isSynced: isSynced));
     } on Failure catch (f) {
       return Left(f);
     } catch (e, stacktrace) {
@@ -80,15 +64,8 @@ class SwaggerBankAccountRepositories implements BankAccountRepository {
     AccountUpdateRequestModel updatedAccount,
   ) async {
     try {
-      final updatedAccount_ = await _driftConnection.updateLocallyAccountById(
-        id,
-        updatedAccount,
-      );
-      await _driftConnection.addUpdateAccountByIdBackup(
-        id,
-        updatedAccount_.id,
-        updatedAccount,
-      );
+      final updatedAccount_ = await _driftConnection.updateLocallyAccountById(id, updatedAccount);
+      await _driftConnection.addUpdateAccountByIdBackup(id, updatedAccount_.id, updatedAccount);
       final isSynced = await _driftConnection.sync();
       return Right(SyncedResponse(updatedAccount_, isSynced: isSynced));
     } on Failure catch (f) {

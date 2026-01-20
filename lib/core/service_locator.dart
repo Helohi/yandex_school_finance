@@ -25,19 +25,14 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   sl.registerLazySingleton(
-    () =>
-        Dio(
-            BaseOptions(
-              baseUrl: "https://shmr-finance.ru/api/v1",
-              headers: {"Authorization": "Bearer ${dotenv.env["TOKEN"]}"},
-              contentType: "application/json",
-              responseType: ResponseType.plain,
-            ),
-          )
-          ..interceptors.addAll([
-            DioDeserializerInterceptor(),
-            DioRetryInterceptor(),
-          ]),
+    () => Dio(
+      BaseOptions(
+        baseUrl: "https://shmr-finance.ru/api/v1",
+        headers: dotenv.isInitialized ? {"Authorization": "Bearer ${dotenv.env["TOKEN"]}"} : null,
+        contentType: "application/json",
+        responseType: ResponseType.plain,
+      ),
+    )..interceptors.addAll([DioDeserializerInterceptor(), DioRetryInterceptor()]),
   );
 
   sl.registerFactory(() => LocalAuthentication());
@@ -54,20 +49,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DriftDatabaseDatasource());
 
   // Connectors
-  sl.registerFactory(
-    () => SwaggerDriftConnection(sl(), sl(), sl(), sl(), sl()),
-  );
+  sl.registerFactory(() => SwaggerDriftConnection(sl(), sl(), sl(), sl(), sl()));
 
   // Repositories
-  sl.registerFactory<BankAccountRepository>(
-    () => SwaggerBankAccountRepositories(sl(), sl()),
-  );
+  sl.registerFactory<BankAccountRepository>(() => SwaggerBankAccountRepositories(sl(), sl()));
 
   sl.registerFactory<CategoryRepository>(() => SwaggerCategoryRepository(sl()));
 
-  sl.registerFactory<TransactionRepository>(
-    () => SwaggerTransactionRepository(sl(), sl()),
-  );
+  sl.registerFactory<TransactionRepository>(() => SwaggerTransactionRepository(sl(), sl()));
 
   // Use Cases
   sl.registerFactory(() => GetCurrentAccountTransactionsInPeriod(sl(), sl()));

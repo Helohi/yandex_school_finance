@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
+import 'package:yandex_school_finance/core/enums/currency_enum.dart';
 import 'package:yandex_school_finance/core/enums/entity_enum.dart';
 import 'package:yandex_school_finance/core/enums/operation_enum.dart';
 import 'package:yandex_school_finance/data/datasources/drift/drift_database_datasource.dart';
@@ -61,27 +62,16 @@ class SwaggerDriftConnection {
       case EntityEnum.transaction:
         switch (event.operationType) {
           case OperationEnum.create:
-            final response = await _dio.post(
-              "/transactions",
-              data: event.payload,
-            );
+            final response = await _dio.post("/transactions", data: event.payload);
             final transaction = TransactionModel.fromJson(response.data);
             await removeLocallyTransactionById(event.localId);
-            await createLocallyTransaction(
-              TransactionRequestModel.fromTransactionModel(transaction),
-              transaction.id,
-            );
+            await createLocallyTransaction(TransactionRequestModel.fromTransactionModel(transaction), transaction.id);
             return;
           case OperationEnum.read:
             return;
           case OperationEnum.update:
-            final response = await _dio.put(
-              "/transactions/${event.remoteId}",
-              data: event.payload,
-            );
-            final transaction = TransactionResponseModel.fromJson(
-              response.data,
-            );
+            final response = await _dio.put("/transactions/${event.remoteId}", data: event.payload);
+            final transaction = TransactionResponseModel.fromJson(response.data);
             await _driftDatabaseDatasource.updateTransactionByLocalId(
               event.localId,
               TransactionTableCompanion(
@@ -89,9 +79,7 @@ class SwaggerDriftConnection {
                 accountId: Value(transaction.account.id),
                 categoryId: Value(transaction.category.id),
                 amount: Value(transaction.amount.toDouble()),
-                transactionDate: Value(
-                  transaction.transactionDate.toIso8601String(),
-                ),
+                transactionDate: Value(transaction.transactionDate.toIso8601String()),
                 createdAt: Value(transaction.createdAt.toIso8601String()),
                 updatedAt: Value(transaction.updatedAt.toIso8601String()),
               ),
@@ -103,10 +91,7 @@ class SwaggerDriftConnection {
         }
       case EntityEnum.account:
         if (event.operationType == OperationEnum.update) {
-          final response = await _dio.put(
-            "/accounts/${event.remoteId}",
-            data: event.payload,
-          );
+          final response = await _dio.put("/accounts/${event.remoteId}", data: event.payload);
           final accountModel = AccountModel.fromJson(response.data);
 
           await _driftDatabaseDatasource.updateAccountById(
@@ -144,10 +129,7 @@ class SwaggerDriftConnection {
     );
   }
 
-  Future<BackupOperationTableData> addCreateTransactionBackup(
-    int localId,
-    TransactionRequestModel transaction,
-  ) async {
+  Future<BackupOperationTableData> addCreateTransactionBackup(int localId, TransactionRequestModel transaction) async {
     return _driftDatabaseDatasource.createOrUpdateBackupOperation(
       BackupOperationTableCompanion.insert(
         entityType: EntityEnum.transaction,
@@ -176,10 +158,7 @@ class SwaggerDriftConnection {
     );
   }
 
-  Future<BackupOperationTableData> addDeleteTransactionBackup(
-    int localId,
-    int remoteId,
-  ) {
+  Future<BackupOperationTableData> addDeleteTransactionBackup(int localId, int remoteId) {
     return _driftDatabaseDatasource.createOrUpdateBackupOperation(
       BackupOperationTableCompanion.insert(
         entityType: EntityEnum.transaction,
@@ -195,28 +174,49 @@ class SwaggerDriftConnection {
   /// Accounts
 
   Future<void> _fillAccounts() async {
-    final accounts = await _accountDatasource.getAccounts();
-    for (final account in accounts) {
+    try {
+      final accounts = await _accountDatasource.getAccounts();
+      for (final account in accounts) {
+        await _driftDatabaseDatasource
+            .into(_driftDatabaseDatasource.accountTable)
+            .insert(
+              AccountTableCompanion.insert(
+                id: Value(account.id),
+                userId: account.userId,
+                name: account.name,
+                balance: account.balance.toDouble(),
+                currency: account.currency,
+                createdAt: account.createdAt.toIso8601String(),
+                updatedAt: account.updatedAt.toIso8601String(),
+              ),
+            );
+      }
+    } catch (e) {
+      log("Error in swagger_drift_connection._fillAccounts: $e");
+      // if no connection to internet we need to create offline account and save all transactions there.
+      // As soon as we have connection we need to sync two accounts
       await _driftDatabaseDatasource
           .into(_driftDatabaseDatasource.accountTable)
           .insert(
             AccountTableCompanion.insert(
-              id: Value(account.id),
-              userId: account.userId,
-              name: account.name,
-              balance: account.balance.toDouble(),
-              currency: account.currency,
-              createdAt: account.createdAt.toIso8601String(),
-              updatedAt: account.updatedAt.toIso8601String(),
+              id: Value(-1),
+              userId: -1,
+              name: 'Offline account',
+              balance: 0,
+              currency: CurrencyEnum.RUB,
+              createdAt: DateTime.now().toIso8601String(),
+              updatedAt: DateTime.now().toIso8601String(),
             ),
           );
     }
   }
 
   Future<List<AccountModel>> getAccounts() async {
-    List<AccountTableData> accounts = await _driftDatabaseDatasource
-        .getAccounts();
+    // Trying to get account list from drift
+    List<AccountTableData> accounts = await _driftDatabaseDatasource.getAccounts();
+
     if (accounts.isEmpty) {
+      // Trying to get account list from server
       await _fillAccounts();
       accounts = await _driftDatabaseDatasource.getAccounts();
     }
@@ -235,9 +235,7 @@ class SwaggerDriftConnection {
       json = account.toJson();
     } else {
       // Cannot use getAccountById as in response no "remoteAccount" data
-      final remoteAccount = (await _accountDatasource.getAccounts()).firstWhere(
-        (acc) => acc.id == id,
-      );
+      final remoteAccount = (await _accountDatasource.getAccounts()).firstWhere((acc) => acc.id == id);
 
       final localId = await _driftDatabaseDatasource
           .into(_driftDatabaseDatasource.accountTable)
@@ -252,9 +250,7 @@ class SwaggerDriftConnection {
             ),
           );
 
-      json = (await _driftDatabaseDatasource.getAccountByLocalId(
-        localId,
-      )).toJson();
+      json = (await _driftDatabaseDatasource.getAccountByLocalId(localId)).toJson();
     }
 
     json["income_stats"] = [];
@@ -262,10 +258,7 @@ class SwaggerDriftConnection {
     return AccountModel.fromJson(json);
   }
 
-  Future<AccountModel> updateLocallyAccountById(
-    int id,
-    AccountUpdateRequestModel updatedAccount,
-  ) async {
+  Future<AccountModel> updateLocallyAccountById(int id, AccountUpdateRequestModel updatedAccount) async {
     final json = (await _driftDatabaseDatasource.updateAccountById(
       id,
       AccountTableCompanion(
@@ -281,24 +274,24 @@ class SwaggerDriftConnection {
   /// Category
 
   Future<void> _fillCategories() async {
-    final categories = await _categoryDatasource.getCategories();
+    try {
+      final categories = await _categoryDatasource.getCategories();
 
-    for (final category in categories) {
-      await _driftDatabaseDatasource
-          .into(_driftDatabaseDatasource.categoryTable)
-          .insert(
-            CategoryTableCompanion.insert(
-              name: category.name,
-              emoji: category.emoji,
-              isIncome: category.isIncome,
-            ),
-          );
+      for (final category in categories) {
+        await _driftDatabaseDatasource
+            .into(_driftDatabaseDatasource.categoryTable)
+            .insert(
+              CategoryTableCompanion.insert(name: category.name, emoji: category.emoji, isIncome: category.isIncome),
+            );
+      }
+    } catch (e) {
+      log("Error in swagger_drift_connection._fillCategories: $e");
+      // We do not have any categories loaded. WTF we should do in this case ???
     }
   }
 
   Future<List<CategoryModel>> getCategories() async {
-    List<CategoryTableData> categories = await _driftDatabaseDatasource
-        .getCategories();
+    List<CategoryTableData> categories = await _driftDatabaseDatasource.getCategories();
     if (categories.isEmpty) {
       await _fillCategories();
       categories = await _driftDatabaseDatasource.getCategories();
@@ -309,24 +302,30 @@ class SwaggerDriftConnection {
   /// Transactions
 
   Future<void> _fillTransactions(int accountId) async {
-    final transactions = await _transactionDatasource.getTransactionsInPeriod(
-      accountId,
-      DateTime(2000),
-      DateTime.now(),
-    );
-
-    for (final transaction in transactions) {
-      await _driftDatabaseDatasource.createTransaction(
-        TransactionTableCompanion.insert(
-          accountId: transaction.account.id,
-          categoryId: transaction.category.id,
-          amount: transaction.amount.toDouble(),
-          transactionDate: transaction.transactionDate.toIso8601String(),
-          comment: Value(transaction.comment),
-          createdAt: transaction.createdAt.toIso8601String(),
-          updatedAt: transaction.updatedAt.toIso8601String(),
-        ),
+    try {
+      final transactions = await _transactionDatasource.getTransactionsInPeriod(
+        accountId,
+        DateTime(2000),
+        DateTime.now(),
       );
+
+      for (final transaction in transactions) {
+        await _driftDatabaseDatasource.createTransaction(
+          TransactionTableCompanion.insert(
+            accountId: transaction.account.id,
+            categoryId: transaction.category.id,
+            amount: transaction.amount.toDouble(),
+            transactionDate: transaction.transactionDate.toIso8601String(),
+            comment: Value(transaction.comment),
+            createdAt: transaction.createdAt.toIso8601String(),
+            updatedAt: transaction.updatedAt.toIso8601String(),
+          ),
+        );
+      }
+    } catch (e) {
+      log("Error in swagger_drift_connection._fillTransactions: $e");
+      // If we do not have internet we do not need to have any transaction. We should sync them after
+      // internet connection
     }
   }
 
@@ -335,24 +334,16 @@ class SwaggerDriftConnection {
     DateTime? startDate,
     DateTime? endDate,
   ]) async {
-    if ((await _driftDatabaseDatasource.getTransactionsByAccount(
-      accountId,
-    )).isEmpty) {
+    if ((await _driftDatabaseDatasource.getTransactionsByAccount(accountId)).isEmpty) {
       await _fillTransactions(accountId);
     }
 
-    final transactions = await _driftDatabaseDatasource.getTransactionsInPeriod(
-      accountId,
-      startDate,
-      endDate,
-    );
+    final transactions = await _driftDatabaseDatasource.getTransactionsInPeriod(accountId, startDate, endDate);
     final transactionsResponseModels = <TransactionResponseModel>[];
 
     for (final transaction in transactions) {
       final account = await getAccountById(transaction.accountId);
-      final category = (await getCategories()).firstWhere(
-        (el) => el.id == transaction.categoryId,
-      );
+      final category = (await getCategories()).firstWhere((el) => el.id == transaction.categoryId);
 
       transactionsResponseModels.add(
         TransactionResponseModel(
@@ -360,9 +351,7 @@ class SwaggerDriftConnection {
           account: AccountBriefModel.fromAccountModel(account),
           category: category,
           amount: Decimal.parse(transaction.amount.toString()),
-          transactionDate: DateTime.parse(
-            transaction.transactionDate,
-          ).toLocal(),
+          transactionDate: DateTime.parse(transaction.transactionDate).toLocal(),
           createdAt: DateTime.parse(transaction.createdAt).toLocal(),
           updatedAt: DateTime.parse(transaction.updatedAt).toLocal(),
         ),
@@ -372,10 +361,7 @@ class SwaggerDriftConnection {
     return transactionsResponseModels;
   }
 
-  Future<TransactionModel> createLocallyTransaction(
-    TransactionRequestModel transaction, [
-    int? remoteId,
-  ]) async {
+  Future<TransactionModel> createLocallyTransaction(TransactionRequestModel transaction, [int? remoteId]) async {
     return TransactionModel.fromJson(
       (await _driftDatabaseDatasource.createTransaction(
         TransactionTableCompanion.insert(
@@ -405,24 +391,18 @@ class SwaggerDriftConnection {
     );
     late final TransactionTableData newTransaction;
     if (isRemoteId) {
-      newTransaction = (await _driftDatabaseDatasource
-          .updateTransactionByRemoteId(id, transactionTableData));
+      newTransaction = (await _driftDatabaseDatasource.updateTransactionByRemoteId(id, transactionTableData));
     } else {
-      newTransaction = (await _driftDatabaseDatasource
-          .updateTransactionByLocalId(id, transactionTableData));
+      newTransaction = (await _driftDatabaseDatasource.updateTransactionByLocalId(id, transactionTableData));
     }
 
     return TransactionResponseModel(
       id: newTransaction.id,
       account: AccountBriefModel.fromJson(
-        (await _driftDatabaseDatasource.getAccountByLocalId(
-          newTransaction.accountId,
-        )).toJson(),
+        (await _driftDatabaseDatasource.getAccountByLocalId(newTransaction.accountId)).toJson(),
       ),
       category: CategoryModel.fromJson(
-        (await _driftDatabaseDatasource.getCategoryById(
-          newTransaction.categoryId,
-        )).toJson(),
+        (await _driftDatabaseDatasource.getCategoryById(newTransaction.categoryId)).toJson(),
       ),
       amount: Decimal.parse(newTransaction.amount.toString()),
       transactionDate: DateTime.parse(newTransaction.transactionDate).toLocal(),
